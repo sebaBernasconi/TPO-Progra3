@@ -8,7 +8,7 @@ public class ConjuntoTA implements ConjuntoTDA {
     int cant;
 
     public void InicializarConjunto() {
-        a = new int[20];
+        a = new int[1000];
         cant = 0;
 
     }
@@ -47,6 +47,15 @@ public class ConjuntoTA implements ConjuntoTDA {
             i++;
         }
         return (i < cant);
+    }
+
+    public void MostrarConjunto(ConjuntoTDA c){
+        while(!c.ConjuntoVacio()) {
+            int elemento = 0;
+            elemento = c.Elegir();
+            System.out.println("El elemento actual es --> " + elemento);
+            c.SacarElemento(elemento);
+        }
     }
 
 }
