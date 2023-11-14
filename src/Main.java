@@ -42,6 +42,11 @@ public class Main {
         ConjuntoTDA c = new ConjuntoTA();
         c.InicializarConjunto();
 
+        int volumenProduccionClientes = 10;
+
+        int costoFijoCentros [] = {1900,1500,2000,2700,2500,3000,500};
+
+
         for (int i = 0; i< 50; i++){
             //agregando los 50 clientes al grafo
             g.AgregarVertice(i);
@@ -51,6 +56,9 @@ public class Main {
             //agregando los posibles centros de distribucion al grafo
             g.AgregarVertice(i);
         }
+
+        //agregando el muelle al grafo
+        g.AgregarVertice(58);
 
         //a continuacion se cargan todas las aristas("rutas") al grafo
         g.AgregarArista(1, 2, 10);
@@ -209,6 +217,8 @@ public class Main {
         g.AgregarArista(57, 0, 4);
         g.AgregarArista(29, 50, 3);
         g.AgregarArista(50, 29, 3);
+
+        
 
         MostrarGrafo(g);
     }
