@@ -1,4 +1,4 @@
-package Interfaz;
+package interfaz;
 
 public interface GrafoTDA {
     void InicializarGrafo();

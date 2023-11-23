@@ -1,6 +1,6 @@
-package Implementacion;
+package implementacion;
 
-import Interfaz.ConjuntoTDA;
+import interfaz.ConjuntoTDA;
 
 public class ConjuntoTA implements ConjuntoTDA {
 

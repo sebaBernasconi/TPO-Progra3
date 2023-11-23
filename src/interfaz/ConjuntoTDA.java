@@ -1,4 +1,4 @@
-package Interfaz;
+package interfaz;
 
 public interface ConjuntoTDA {
     void InicializarConjunto();
@@ -7,5 +7,4 @@ public interface ConjuntoTDA {
     int Elegir();
     void SacarElemento(int x);
     boolean Pertenece(int x);
-    void MostrarConjunto(ConjuntoTDA c);
 }

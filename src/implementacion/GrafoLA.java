@@ -1,7 +1,7 @@
-package Implementacion;
+package implementacion;
 
-import Interfaz.ConjuntoTDA;
-import Interfaz.GrafoTDA;
+import interfaz.ConjuntoTDA;
+import interfaz.GrafoTDA;
 
 public class GrafoLA implements GrafoTDA {
 
@@ -33,8 +33,8 @@ public class GrafoLA implements GrafoTDA {
     }
 
     public void EliminarVertice(int v) {
-        // Se recorre la lista de v´ertices para remover el nodo v
-        //y las aristas con este v´ertice.
+        // Se recorre la lista de vertices para remover el nodo v
+        //y las aristas con este vertice.
         // Distingue el caso que sea el primer nodo
         if( origen. nodo == v) {
             origen = origen.sigNodo;
@@ -142,9 +142,9 @@ public class GrafoLA implements GrafoTDA {
         //creamos el grafo que vamos a devolver y agregamos el vertice que va a
         //el punto de partida. Ademas creamos un conjunto donde agregamos todos los
         //vertices del grafo original y sacamos el punto de partida
-        GrafoTDA grafoAraña = new GrafoLA();
-        grafoAraña.InicializarGrafo();
-        grafoAraña.AgregarVertice(partida);
+        GrafoTDA grafoArania = new GrafoLA();
+        grafoArania.InicializarGrafo();
+        grafoArania.AgregarVertice(partida);
 
         ConjuntoTDA verticesGrafoOriginal = grafo.Vertices();
         verticesGrafoOriginal.SacarElemento(partida);
@@ -156,9 +156,9 @@ public class GrafoLA implements GrafoTDA {
         while (!verticesGrafoOriginal.ConjuntoVacio()) {
             verticeActual = verticesGrafoOriginal.Elegir();
             verticesGrafoOriginal.SacarElemento(verticeActual);
-            grafoAraña.AgregarVertice(verticeActual);
+            grafoArania.AgregarVertice(verticeActual);
             if (grafo.ExisteArista(partida, verticeActual)) {
-                grafoAraña.AgregarArista(partida, verticeActual, grafo.PesoArista(partida, verticeActual));
+                grafoArania.AgregarArista(partida, verticeActual, grafo.PesoArista(partida, verticeActual));
             }
         }
         //volvemos a llenar el conjunto de vertices del grafo original para
@@ -189,8 +189,8 @@ public class GrafoLA implements GrafoTDA {
                 verticeAux = VerticeGrafoOriginal.Elegir();
                 VerticeGrafoOriginal.SacarElemento(verticeAux);
                 verticesVisitados.AgregarElemento(verticeAux);
-                if ((grafoAraña.ExisteArista(partida , verticeAux)) && (menorPeso == 0 || (menorPeso > grafoAraña.PesoArista(partida, verticeAux)))) {
-                    menorPeso = grafoAraña.PesoArista(partida, verticeAux);
+                if ((grafoArania.ExisteArista(partida , verticeAux)) && (menorPeso == 0 || (menorPeso > grafoArania.PesoArista(partida, verticeAux)))) {
+                    menorPeso = grafoArania.PesoArista(partida, verticeAux);
                     verticeMenorPeso = verticeAux;
                 }
             }
@@ -217,12 +217,12 @@ public class GrafoLA implements GrafoTDA {
                     //con el que ahora seria el mas corto.
 
                     if (grafo.ExisteArista(verticeMenorPeso, verticeAux)) {
-                        if (!grafoAraña.ExisteArista(partida, verticeAux)) {
-                            grafoAraña.AgregarArista(partida, verticeAux, grafoAraña.PesoArista(partida, verticeMenorPeso)+grafo.PesoArista(verticeMenorPeso, verticeAux));
+                        if (!grafoArania.ExisteArista(partida, verticeAux)) {
+                            grafoArania.AgregarArista(partida, verticeAux, grafoArania.PesoArista(partida, verticeMenorPeso)+grafo.PesoArista(verticeMenorPeso, verticeAux));
                         }
                         else {
-                            if (grafoAraña.PesoArista(partida, verticeAux) > grafoAraña.PesoArista(partida, verticeMenorPeso)+grafo.PesoArista(verticeMenorPeso, verticeAux)) {
-                                grafoAraña.AgregarArista(partida, verticeAux , grafoAraña.PesoArista(partida, verticeMenorPeso)+grafo.PesoArista(verticeMenorPeso, verticeAux));
+                            if (grafoArania.PesoArista(partida, verticeAux) > grafoArania.PesoArista(partida, verticeMenorPeso)+grafo.PesoArista(verticeMenorPeso, verticeAux)) {
+                                grafoArania.AgregarArista(partida, verticeAux , grafoArania.PesoArista(partida, verticeMenorPeso)+grafo.PesoArista(verticeMenorPeso, verticeAux));
                             }
                         }
                     }
@@ -230,7 +230,7 @@ public class GrafoLA implements GrafoTDA {
             }
         }
 
-        return grafoAraña;
+        return grafoArania;
     }
 
 

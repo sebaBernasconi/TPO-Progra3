@@ -1,7 +1,7 @@
-import Implementacion.ConjuntoTA;
-import Implementacion.GrafoLA;
-import Interfaz.ConjuntoTDA;
-import Interfaz.GrafoTDA;
+import implementacion.ConjuntoTA;
+import implementacion.GrafoLA;
+import interfaz.ConjuntoTDA;
+import interfaz.GrafoTDA;
 
 public class Main {
     public  static void MostrarGrafo(GrafoTDA A) {
@@ -18,7 +18,7 @@ public class Main {
                 else
                     System.out.print(x1+"->(0)->"+x2+" ");
             }
-            System.out.println("");
+            System.out.println();
         }
     }
     public static void MostrarDijkstra(GrafoTDA A,int partida) {
@@ -32,7 +32,7 @@ public class Main {
             else
                 System.out.print(x1+"->(0)->"+x2+" ");
         }
-        System.out.println("");
+        System.out.println();
     }
     public static void main(String[] args) {
 
@@ -211,5 +211,8 @@ public class Main {
         g.AgregarArista(50, 29, 3);
 
         MostrarGrafo(g);
+
+
+
     }
 }
