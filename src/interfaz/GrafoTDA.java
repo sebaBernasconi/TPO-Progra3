@@ -9,6 +9,5 @@ public interface GrafoTDA {
     void EliminarArista(int v1, int v2);
     boolean ExisteArista(int v1, int v2);
     int PesoArista(int v1, int v2);
-    GrafoTDA Dijkstra(GrafoTDA grafo, int partida);
 
 }

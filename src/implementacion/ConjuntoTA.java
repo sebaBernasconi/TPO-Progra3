@@ -58,4 +58,14 @@ public class ConjuntoTA implements ConjuntoTDA {
         }
     }
 
+    public void Sacar(int x) {
+        int i = 0;
+        while(i < cant && a[i] != x)
+            i++;
+        if (i < cant) {
+            a[i] = a[cant - 1];
+            cant--;
+        }
+
+    }
 }

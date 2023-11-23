@@ -1,7 +1,11 @@
 import implementacion.ConjuntoTA;
+import implementacion.Dijkstra;
 import implementacion.GrafoLA;
 import interfaz.ConjuntoTDA;
 import interfaz.GrafoTDA;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public  static void MostrarGrafo(GrafoTDA A) {
@@ -44,7 +48,7 @@ public class Main {
 
         int volumenProduccionClientes = 10;
 
-        int costoFijoCentros [] = {1900,1500,2000,2700,2500,3000,500};
+        int[] costoFijoCentros = {1900,1500,2000,2700,2500,3000,500};
 
 
         for (int i = 0; i< 50; i++){
@@ -58,7 +62,7 @@ public class Main {
         }
 
         //agregando el muelle al grafo
-        g.AgregarVertice(58);
+//        g.AgregarVertice(58);
 
         //a continuacion se cargan todas las aristas("rutas") al grafo
         g.AgregarArista(1, 2, 10);
@@ -219,10 +223,43 @@ public class Main {
         g.AgregarArista(50, 29, 3);
 
         
-
+//
         MostrarGrafo(g);
-
-
+//
+//        Dijkstra dijkstra = new Dijkstra();
+//
+//        List<Integer> costosCD1 = new ArrayList<>();
+//        List<Integer> costosCD2 = new ArrayList<>();
+//        List<Integer> costosCD3 = new ArrayList<>();
+//        List<Integer> costosCD4 = new ArrayList<>();
+//        List<Integer> costosCD5 = new ArrayList<>();
+//        List<Integer> costosCD6 = new ArrayList<>();
+//        List<Integer> costosCD7 = new ArrayList<>();
+//        List<Integer> costosCD8 = new ArrayList<>();
+//
+//        for (int i = 50; i <= 57; i++) {
+//            GrafoTDA grafoDijkstra = dijkstra.CalcularDijkstra(g, i);
+//            MostrarGrafo(grafoDijkstra);
+//            for (int j = 0; j <= 50; j++) {
+//                costosCD1.add(grafoDijkstra.PesoArista())
+//            }
+//        }
+        // probar dijkstra con este grafo
+        GrafoTDA grafo = new GrafoLA();
+        grafo.AgregarVertice(0);
+        grafo.AgregarVertice(1);
+        grafo.AgregarVertice(2);
+        grafo.AgregarVertice(3);
+        grafo.AgregarArista(0,1,5);
+        grafo.AgregarArista(1,0,5);
+        grafo.AgregarArista(1,2,9);
+        grafo.AgregarArista(2,1,9);
+        grafo.AgregarArista(2,3,6);
+        grafo.AgregarArista(3,2,6);
+        grafo.AgregarArista(3,1,2);
+        grafo.AgregarArista(1,3,2);
+        grafo.AgregarArista(2,0,8);
+        grafo.AgregarArista(0,2,8);
 
     }
 }
