@@ -23,7 +23,7 @@ public class Dijkstra {
         //elegimos uno de los vertices del conjunto de vertices del grafo original
         // y lo sacamos del conjunto hasta que se vacie. Ademas lo agregamos al grafo que vamos a devolver y
         //preguntamos si existe una arista directa entre el punto de partida y el vertice
-        //que sacamos del conjunt para usarla para comparar
+        //que sacamos del conjunto para usarla para comparar
         while (!verticesGrafoOriginal.ConjuntoVacio()) {
             verticeActual = verticesGrafoOriginal.Elegir();
             verticesGrafoOriginal.SacarElemento(verticeActual);
@@ -75,7 +75,7 @@ public class Dijkstra {
                     VerticeGrafoOriginal.AgregarElemento(verticeAux);
 
                     //elegimos el vertice del grafo y preguntamos si hay una arista entre
-                    //el vertcie con menor peso y el vertice actual en el grafo original. si esto se cumple
+                    //el vertice con menor peso y el vertice actual en el grafo original. si esto se cumple
                     //pregunta si no hay una arista entre el punto de partida y el vertice actual en el grafo que devolvemos
                     // si esto tambien se cumple agrega una arista al grafo que vamos a devolver
                     //entre el punto de partida y el vertice actual y le pone el peso que hay desde

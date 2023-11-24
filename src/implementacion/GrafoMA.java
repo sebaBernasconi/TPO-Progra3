@@ -8,19 +8,13 @@ public class GrafoMA implements GrafoTDA {
 	int[][] mAdy;
 	int[] etiqs;
 	int cant;
-	int tam = 58;
-			
+	int tam = 59;
+
 	@Override
 	public void InicializarGrafo() {
 		mAdy = new int[tam][tam];
 		etiqs = new int[tam];
 		cant = 0;
-
-		for (int i = 0; i < tam; i++) {
-			for (int j = 0; j < tam; j++) {
-				mAdy[i][j] = Integer.MAX_VALUE; // Valor que representa infinito
-			}
-		}
 	}
 
 	@Override
@@ -86,5 +80,9 @@ public class GrafoMA implements GrafoTDA {
 		while(i >= 0 && etiqs[i] != v)
 			i--;
 		return i;
+	}
+
+	public int[][] getmAdy() {
+		return mAdy;
 	}
 }

@@ -1,14 +1,10 @@
-import implementacion.ConjuntoTA;
-import implementacion.Dijkstra;
-import implementacion.GrafoMA;
-import implementacion.Nodo;
+import implementacion.*;
 import interfaz.ConjuntoTDA;
 import interfaz.GrafoTDA;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 
 public class Main {
@@ -69,7 +65,7 @@ public class Main {
             int x2 = V2.Elegir();
             V2.SacarElemento(x2);
             if (A.ExisteArista(x1,x2))
-                System.out.print(x1+"->("+A.PesoArista(x1,x2)+")->"+x2+" ");
+                System.out.print(x1+"->(Costo: "+A.PesoArista(x1,x2)+")->"+x2+" ");
             else
                 System.out.print(x1+"->(0)->"+x2+" ");
             System.out.println();
@@ -77,8 +73,7 @@ public class Main {
     }
     public static void main(String[] args) {
 
-        List<Integer> costosCD1, costosCD2, costosCD3, costosCD4, costosCD5, costosCD6,
-            costosCD7, costosCD8 = new ArrayList<>();
+        int[][] matrizCostos = new int[8][50];
 
         GrafoTDA g = new GrafoMA();
         g.InicializarGrafo();
@@ -94,179 +89,44 @@ public class Main {
             //agregando los 50 clientes al grafo
             g.AgregarVertice(i);
         }
-
+        g.AgregarVertice(59);
         for (int i = 50; i < 58; i++){
             //agregando los posibles centros de distribucion al grafo
             g.AgregarVertice(i);
         }
 
-        //agregando el muelle al grafo
-//        g.AgregarVertice(58);
-
         //a continuacion se cargan todas las aristas("rutas") al grafo
-        g.AgregarArista(1, 2, 10);
-        g.AgregarArista(2, 1, 10);
-        g.AgregarArista(2, 3, 10);
-        g.AgregarArista(3, 2, 10);
-        g.AgregarArista(1, 28, 8);
-        g.AgregarArista(28, 1, 8);
-        g.AgregarArista(28, 50, 11);
-        g.AgregarArista(50, 28, 11);
-        g.AgregarArista(1, 3, 12);
-        g.AgregarArista(3, 1, 12);
-        g.AgregarArista(3, 50, 10);
-        g.AgregarArista(50, 3, 10);
-        g.AgregarArista(3, 4, 8);
-        g.AgregarArista(4, 3, 8);
-        g.AgregarArista(51, 4, 9);
-        g.AgregarArista(4, 51, 9);
-        g.AgregarArista(3, 5, 4);
-        g.AgregarArista(5, 3, 4);
-        g.AgregarArista(5, 51, 3);
-        g.AgregarArista(51, 5, 3);
-        g.AgregarArista(6, 5, 9);
-        g.AgregarArista(5, 6, 9);
-        g.AgregarArista(6, 7, 8);
-        g.AgregarArista(7, 6, 8);
-        g.AgregarArista(7, 8, 4);
-        g.AgregarArista(8, 7, 4);
-        g.AgregarArista(8, 51, 10);
-        g.AgregarArista(51, 8, 10);
-        g.AgregarArista(8, 10, 12);
-        g.AgregarArista(10, 8, 12);
-        g.AgregarArista(9, 10, 9);
-        g.AgregarArista(10, 9, 9);
-        g.AgregarArista(10, 11, 6);
-        g.AgregarArista(11, 10, 6);
-        g.AgregarArista(11, 12, 5);
-        g.AgregarArista(12, 11, 5);
-        g.AgregarArista(12, 13, 6);
-        g.AgregarArista(13, 12, 6);
-        g.AgregarArista(11, 14, 8);
-        g.AgregarArista(14, 11, 8);
-        g.AgregarArista(14, 15, 8);
-        g.AgregarArista(15, 14, 8);
-        g.AgregarArista(15, 16, 9);
-        g.AgregarArista(16, 15, 9);
-        g.AgregarArista(15, 20, 6);
-        g.AgregarArista(20, 15, 6);
-        g.AgregarArista(13, 20, 4);
-        g.AgregarArista(20, 13, 4);
-        g.AgregarArista(20, 18, 2);
-        g.AgregarArista(18, 20, 2);
-        g.AgregarArista(17, 18, 6);
-        g.AgregarArista(18, 17, 6);
-        g.AgregarArista(18, 19, 7);
-        g.AgregarArista(19, 18, 7);
-        g.AgregarArista(19, 23, 6);
-        g.AgregarArista(23, 19, 6);
-        g.AgregarArista(18, 55, 9);
-        g.AgregarArista(55, 18, 9);
-        g.AgregarArista(20, 55, 7);
-        g.AgregarArista(55, 20, 7);
-        g.AgregarArista(20, 21, 6);
-        g.AgregarArista(21, 20, 6);
-        g.AgregarArista(21, 56, 9);
-        g.AgregarArista(56, 21, 9);
-        g.AgregarArista(22, 56, 7);
-        g.AgregarArista(56, 22, 7);
-        g.AgregarArista(22, 23, 5);
-        g.AgregarArista(23, 22, 5);
-        g.AgregarArista(23, 55, 4);
-        g.AgregarArista(55, 23, 4);
-        g.AgregarArista(23, 24, 4);
-        g.AgregarArista(24, 23, 4);
-        g.AgregarArista(24, 25, 5);
-        g.AgregarArista(25, 24, 5);
-        g.AgregarArista(24, 26, 6);
-        g.AgregarArista(26, 24, 6);
-        g.AgregarArista(24, 27, 7);
-        g.AgregarArista(27, 24, 7);
-        g.AgregarArista(27, 57, 7);
-        g.AgregarArista(57, 27, 7);
-        g.AgregarArista(26, 57, 6);
-        g.AgregarArista(57, 26, 6);
-        g.AgregarArista(29, 31, 5);
-        g.AgregarArista(31, 29, 5);
-        g.AgregarArista(31, 32, 7);
-        g.AgregarArista(32, 31, 7);
-        g.AgregarArista(31, 53, 4);
-        g.AgregarArista(53, 31, 4);
-        g.AgregarArista(50, 30, 5);
-        g.AgregarArista(30, 50, 5);
-        g.AgregarArista(30, 53, 7);
-        g.AgregarArista(53, 30, 7);
-        g.AgregarArista(32, 33, 8);
-        g.AgregarArista(33, 32, 8);
-        g.AgregarArista(33, 52, 4);
-        g.AgregarArista(52, 33, 4);
-        g.AgregarArista(31, 52, 8);
-        g.AgregarArista(52, 31, 8);
-        g.AgregarArista(52, 34, 8);
-        g.AgregarArista(34, 52, 8);
-        g.AgregarArista(34, 35, 6);
-        g.AgregarArista(35, 34, 6);
-        g.AgregarArista(35, 36, 7);
-        g.AgregarArista(36, 35, 7);
-        g.AgregarArista(34, 39, 4);
-        g.AgregarArista(39, 34, 4);
-        g.AgregarArista(39, 38, 3);
-        g.AgregarArista(38, 39, 3);
-        g.AgregarArista(38, 37, 9);
-        g.AgregarArista(37, 38, 9);
-        g.AgregarArista(39, 40, 8);
-        g.AgregarArista(40, 39, 8);
-        g.AgregarArista(40, 41, 7);
-        g.AgregarArista(41, 40, 7);
-        g.AgregarArista(52, 41, 6);
-        g.AgregarArista(41, 52, 6);
-        g.AgregarArista(41, 53, 9);
-        g.AgregarArista(53, 41, 9);
-        g.AgregarArista(41, 13, 7);
-        g.AgregarArista(13, 41, 7);
-        g.AgregarArista(39, 43, 5);
-        g.AgregarArista(43, 39, 5);
-        g.AgregarArista(39, 54, 4);
-        g.AgregarArista(54, 39, 4);
-        g.AgregarArista(40, 54, 5);
-        g.AgregarArista(54, 40, 5);
-        g.AgregarArista(41, 49, 6);
-        g.AgregarArista(49, 41, 6);
-        g.AgregarArista(43, 42, 5);
-        g.AgregarArista(42, 43, 5);
-        g.AgregarArista(43, 54, 4);
-        g.AgregarArista(54, 43, 4);
-        g.AgregarArista(43, 44, 9);
-        g.AgregarArista(44, 43, 9);
-        g.AgregarArista(44, 45, 7);
-        g.AgregarArista(45, 44, 7);
-        g.AgregarArista(45, 54, 6);
-        g.AgregarArista(54, 45, 6);
-        g.AgregarArista(45, 46, 9);
-        g.AgregarArista(46, 45, 9);
-        g.AgregarArista(45, 47, 7);
-        g.AgregarArista(47, 45, 7);
-        g.AgregarArista(47, 48, 8);
-        g.AgregarArista(48, 47, 8);
-        g.AgregarArista(48, 49, 9);
-        g.AgregarArista(49, 48, 9);
-        g.AgregarArista(49, 56, 3);
-        g.AgregarArista(56, 49, 3);
-        g.AgregarArista(48, 0, 6);
-        g.AgregarArista(0, 48, 6);
-        g.AgregarArista(0, 56, 6);
-        g.AgregarArista(56, 0, 6);
-        g.AgregarArista(0, 57, 4);
-        g.AgregarArista(57, 0, 4);
-        g.AgregarArista(29, 50, 3);
-        g.AgregarArista(50, 29, 3);
-
+        try {
+            File archivoRutas = new File("C:\\Users\\Sebas\\Documents\\GitHub\\TPO-Progra3\\src\\rutasSinComentarios.txt");
+            Scanner sc = new Scanner(archivoRutas);
+            while (sc.hasNextLine()) {
+                String data = sc.nextLine();
+                String[] dataSplit = data.split(",");
+                int v1 = Integer.parseInt(dataSplit[0]);
+                int v2 = Integer.parseInt(dataSplit[1]);
+                int peso = Integer.parseInt(dataSplit[2]);
+                g.AgregarArista(v1, v2, peso);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
 
 //        MostrarGrafo(g);
 
-        Dijkstra dijkstra = new Dijkstra();
-        GrafoTDA grafoDijkstra = dijkstra.CalcularDijkstra(g, 50);
+//        Dijkstra dijkstra = new Dijkstra();
+//        GrafoTDA grafoDijkstra = dijkstra.CalcularDijkstra(g, 50);
+//        if (grafoDijkstra.ExisteArista(50, 9)) {
+//            System.out.println(grafoDijkstra.PesoArista(50, 9));
+//        }
+//        else {
+//            System.out.println("No existe arista");
+//        }
+//        MostrarDijkstra(grafoDijkstra, 50);
 
+        DijkstraOnline dijkstra = new DijkstraOnline();
+        dijkstra.dijkstra(g.getmAdy(), 50);
 
         // probar dijkstra con este grafo
 //        GrafoTDA grafo = new GrafoMA();
@@ -275,6 +135,10 @@ public class Main {
 //        grafo.AgregarVertice(1);
 //        grafo.AgregarVertice(2);
 //        grafo.AgregarVertice(3);
+//        grafo.AgregarVertice(4);
+//        grafo.AgregarVertice(5);
+//        grafo.AgregarVertice(6);
+//        grafo.AgregarVertice(7);
 //        grafo.AgregarArista(0,1,5);
 //        grafo.AgregarArista(1,0,5);
 //        grafo.AgregarArista(1,2,9);
@@ -285,8 +149,22 @@ public class Main {
 //        grafo.AgregarArista(1,3,2);
 //        grafo.AgregarArista(2,0,8);
 //        grafo.AgregarArista(0,2,8);
-//        GrafoTDA grafoDijkstra2 = dijkstra.CalcularDijkstra(grafo, 1);
-//        MostrarDijkstra(grafoDijkstra2, 1);
+//        grafo.AgregarArista(3,4,1);
+//        grafo.AgregarArista(4,1,1);
+//        grafo.AgregarArista(4,0,6);
+//        grafo.AgregarArista(0,4,6);
+//        grafo.AgregarArista(3,5,9);
+//        grafo.AgregarArista(5,3,9);
+//        grafo.AgregarArista(5,6,4);
+//        grafo.AgregarArista(6,5,4);
+//        grafo.AgregarArista(6,7,3);
+//        grafo.AgregarArista(7,6,3);
+//        grafo.AgregarArista(7,0,3);
+//        grafo.AgregarArista(0,7,3);
+//        grafo.AgregarArista(6,0,5);
+//        grafo.AgregarArista(0,6,5);
+//        GrafoTDA grafoDijkstra2 = dijkstra.CalcularDijkstra(grafo, 0);
+//        MostrarDijkstra(grafoDijkstra2, 0);
     }
 
     public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
@@ -297,5 +175,6 @@ public class Main {
             // calcular redMin redMax
         }
         return costoAnual;
+
     }
 }
