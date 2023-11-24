@@ -1,12 +1,15 @@
 import implementacion.ConjuntoTA;
 import implementacion.Dijkstra;
-import implementacion.GrafoLA;
+import implementacion.GrafoMA;
+import implementacion.Nodo;
 import interfaz.ConjuntoTDA;
 import interfaz.GrafoTDA;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.PriorityQueue;
+
 
 public class Main {
     static int u = Integer.MAX_VALUE;
@@ -22,10 +25,10 @@ public class Main {
             u = valorCompar;
         }
     }
-    public static void CalcularC(List<Integer>costosCentro, int[] costoFijoCentro, int centroEvaluado){
+    public static int CalcularC(List<Integer>costosCentro, int[] costoFijoCentro, int centroEvaluado){
         int c = 0;
         c = Collections.min(costosCentro) + costoFijoCentro[centroEvaluado];
-
+        return c;
     }
     public static int CalcularRedMin(List<Integer>costosCentro){
         int redMin = 0;
@@ -37,23 +40,28 @@ public class Main {
 
         return redMax;
     }
-    public  static void MostrarGrafo(GrafoTDA A) {
-        ConjuntoTDA V1 = A.Vertices();
-        while (!V1.ConjuntoVacio()) {
-            int x1 = V1.Elegir();
-            V1.SacarElemento(x1);
-            ConjuntoTDA V2 = A.Vertices();
-            while (!V2.ConjuntoVacio()) {
-                int x2 = V2.Elegir();
-                V2.SacarElemento(x2);
-                if (A.ExisteArista(x1,x2))
-                    System.out.print(x1+"->("+A.PesoArista(x1,x2)+")->"+x2+" ");
-                else
-                    System.out.print(x1+"->(0)->"+x2+" ");
+
+    public static void MostrarGrafo(GrafoTDA U) {
+        ConjuntoTDA V = U.Vertices();
+        ConjuntoTDA D;
+        int v;
+        int d;
+        int p;
+        while(!V.ConjuntoVacio()) {						// ciclo externo
+            v = V.Elegir();
+            System.out.println("Vértice " + v);
+            V.Sacar(v);
+            D = U.Vertices();
+            while(!D.ConjuntoVacio()) {					// ciclo interno
+                d = D.Elegir();
+                p = U.PesoArista(v, d);
+                if (p != 0)
+                    System.out.println("          " + v+"->(Peso: "+ p +")->"+d+" ");
+                D.Sacar(d);
             }
-            System.out.println();
         }
     }
+
     public static void MostrarDijkstra(GrafoTDA A,int partida) {
         int x1 = partida;
         ConjuntoTDA V2 = A.Vertices();
@@ -64,12 +72,15 @@ public class Main {
                 System.out.print(x1+"->("+A.PesoArista(x1,x2)+")->"+x2+" ");
             else
                 System.out.print(x1+"->(0)->"+x2+" ");
+            System.out.println();
         }
-        System.out.println();
     }
     public static void main(String[] args) {
 
-        GrafoTDA g = new GrafoLA();
+        List<Integer> costosCD1, costosCD2, costosCD3, costosCD4, costosCD5, costosCD6,
+            costosCD7, costosCD8 = new ArrayList<>();
+
+        GrafoTDA g = new GrafoMA();
         g.InicializarGrafo();
 
         ConjuntoTDA c = new ConjuntoTA();
@@ -78,7 +89,6 @@ public class Main {
         int volumenProduccionClientes = 10;
 
         int[] costoFijoCentros = {1900,1500,2000,2700,2500,3000,500};
-
 
         for (int i = 0; i< 50; i++){
             //agregando los 50 clientes al grafo
@@ -252,43 +262,40 @@ public class Main {
         g.AgregarArista(50, 29, 3);
 
 
-        MostrarGrafo(g);
+//        MostrarGrafo(g);
 
-//        Dijkstra dijkstra = new Dijkstra();
+        Dijkstra dijkstra = new Dijkstra();
+        GrafoTDA grafoDijkstra = dijkstra.CalcularDijkstra(g, 50);
 
 
- //       for (int i = 50; i <= 57; i++) {
-//            GrafoTDA grafoDijkstra = dijkstra.CalcularDijkstra(g, i);
-//          MostrarGrafo(grafoDijkstra);
-   //         for (int j = 0; j <= 50; j++) {
-     //           costosCD1.add(grafoDijkstra.PesoArista())
-       //     }
-        //}
-
-         List<Integer> costosCD1 = new ArrayList<>();
-         List<Integer> costosCD2 = new ArrayList<>();
-         List<Integer> costosCD3 = new ArrayList<>();
-         List<Integer> costosCD4 = new ArrayList<>();
-         List<Integer> costosCD5 = new ArrayList<>();
-         List<Integer> costosCD6 = new ArrayList<>();
-         List<Integer> costosCD7 = new ArrayList<>();
-         List<Integer> costosCD8 = new ArrayList<>();
         // probar dijkstra con este grafo
-        GrafoTDA grafo = new GrafoLA();
-        grafo.AgregarVertice(0);
-        grafo.AgregarVertice(1);
-        grafo.AgregarVertice(2);
-        grafo.AgregarVertice(3);
-        grafo.AgregarArista(0,1,5);
-        grafo.AgregarArista(1,0,5);
-        grafo.AgregarArista(1,2,9);
-        grafo.AgregarArista(2,1,9);
-        grafo.AgregarArista(2,3,6);
-        grafo.AgregarArista(3,2,6);
-        grafo.AgregarArista(3,1,2);
-        grafo.AgregarArista(1,3,2);
-        grafo.AgregarArista(2,0,8);
-        grafo.AgregarArista(0,2,8);
+//        GrafoTDA grafo = new GrafoMA();
+//        grafo.InicializarGrafo();
+//        grafo.AgregarVertice(0);
+//        grafo.AgregarVertice(1);
+//        grafo.AgregarVertice(2);
+//        grafo.AgregarVertice(3);
+//        grafo.AgregarArista(0,1,5);
+//        grafo.AgregarArista(1,0,5);
+//        grafo.AgregarArista(1,2,9);
+//        grafo.AgregarArista(2,1,9);
+//        grafo.AgregarArista(2,3,6);
+//        grafo.AgregarArista(3,2,6);
+//        grafo.AgregarArista(3,1,2);
+//        grafo.AgregarArista(1,3,2);
+//        grafo.AgregarArista(2,0,8);
+//        grafo.AgregarArista(0,2,8);
+//        GrafoTDA grafoDijkstra2 = dijkstra.CalcularDijkstra(grafo, 1);
+//        MostrarDijkstra(grafoDijkstra2, 1);
+    }
 
+    public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
+        int costoAnual = Integer.MAX_VALUE;
+        PriorityQueue<Nodo> colaP = new PriorityQueue<>();
+        colaP.add(new Nodo(u, CalcularC(costosCD1, costoFijoCentro, 1)));
+        while (!colaP.isEmpty()) {
+            // calcular redMin redMax
+        }
+        return costoAnual;
     }
 }

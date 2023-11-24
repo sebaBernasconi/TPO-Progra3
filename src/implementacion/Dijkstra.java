@@ -13,7 +13,7 @@ public class Dijkstra {
         //creamos el grafo que vamos a devolver y agregamos el vertice que va a
         //el punto de partida. Ademas creamos un conjunto donde agregamos todos los
         //vertices del grafo original y sacamos el punto de partida
-        GrafoTDA grafoArania = new GrafoLA();
+        GrafoTDA grafoArania = new GrafoMA();
         grafoArania.InicializarGrafo();
         grafoArania.AgregarVertice(partida);
 
