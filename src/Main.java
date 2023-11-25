@@ -26,8 +26,20 @@ public class Main {
         c = Collections.min(costosCentro) + costoFijoCentro[centroEvaluado];
         return c;
     }
-    public static int CalcularRedMin(List<Integer>costosCentro){
-        int redMin = 0;
+    public static int CalcularRedMin(int [][] costosClientes, int redMinmaAnterior,int centroEvaluado){
+        int redMin = Integer.MAX_VALUE;
+
+        for (int i = 0; i < 49; i++ ) { //recorriendo columnas
+            for (int j = 0; i < 8; i++ ){//recorriendo filas
+                //primero recorre todas las filas para una sola columna
+                //sacando asi el valor para el minimo
+                if (costosClientes[i][j] < redMinmaAnterior){
+                    redMin = costosClientes[i][j];
+                }
+
+            }
+        }
+
 
         return redMin;
     }
