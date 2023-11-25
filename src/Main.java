@@ -27,13 +27,13 @@ public class Main {
         return c;
     }
     public static int CalcularRedMin(int [][] costosClientes, int redMinmaAnterior,int centroEvaluado){
-        int redMin = Integer.MAX_VALUE;
+        int redMin = redMinmaAnterior;
 
         for (int i = 0; i < 49; i++ ) { //recorriendo columnas
             for (int j = 0; i < 8; i++ ){//recorriendo filas
                 //primero recorre todas las filas para una sola columna
                 //sacando asi el valor para el minimo
-                if (costosClientes[i][j] < redMinmaAnterior){
+                if (costosClientes[i][j] < redMin){
                     redMin = costosClientes[i][j];
                 }
 
