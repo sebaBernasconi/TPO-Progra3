@@ -3,7 +3,6 @@ import interfaz.ConjuntoTDA;
 import interfaz.GrafoTDA;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.*;
 
 
@@ -39,7 +38,6 @@ public class Main {
 
             }
         }
-
 
         return redMin;
     }
@@ -87,11 +85,8 @@ public class Main {
 
         int[][] matrizCostos = new int[8][50];
 
-        GrafoTDA g = new GrafoMA();
-        g.InicializarGrafo();
-
-        ConjuntoTDA c = new ConjuntoTA();
-        c.InicializarConjunto();
+        GrafoTDA grafo = new GrafoMA();
+        grafo.InicializarGrafo();
 
         int volumenProduccionClientes = 10;
 
@@ -99,17 +94,17 @@ public class Main {
 
         for (int i = 0; i< 50; i++){
             //agregando los 50 clientes al grafo
-            g.AgregarVertice(i);
+            grafo.AgregarVertice(i);
         }
-        g.AgregarVertice(59);
+
         for (int i = 50; i < 58; i++){
             //agregando los posibles centros de distribucion al grafo
-            g.AgregarVertice(i);
+            grafo.AgregarVertice(i);
         }
 
         //a continuacion se cargan todas las aristas("rutas") al grafo
         try {
-            File archivoRutas = new File("C:\\Users\\Sebas\\Documents\\GitHub\\TPO-Progra3\\src\\rutasSinComentarios.txt");
+            File archivoRutas = new File("rutasSinComentarios.txt");
             Scanner sc = new Scanner(archivoRutas);
             while (sc.hasNextLine()) {
                 String data = sc.nextLine();
@@ -117,7 +112,7 @@ public class Main {
                 int v1 = Integer.parseInt(dataSplit[0]);
                 int v2 = Integer.parseInt(dataSplit[1]);
                 int peso = Integer.parseInt(dataSplit[2]);
-                g.AgregarArista(v1, v2, peso);
+                grafo.AgregarArista(v1, v2, peso);
             }
         }
         catch (Exception e) {
@@ -125,64 +120,22 @@ public class Main {
             e.printStackTrace();
         }
 
-//        MostrarGrafo(g);
+        Dijkstra  dijkstra= new Dijkstra();
+        int[][] matrizAdyacencia = grafo.getmAdy();
 
-//        Dijkstra dijkstra = new Dijkstra();
-//        GrafoTDA grafoDijkstra = dijkstra.CalcularDijkstra(g, 50);
-//        if (grafoDijkstra.ExisteArista(50, 9)) {
-//            System.out.println(grafoDijkstra.PesoArista(50, 9));
-//        }
-//        else {
-//            System.out.println("No existe arista");
-//        }
-//        MostrarDijkstra(grafoDijkstra, 50);
+        for (int i = 50; i < 58; i++){
+            int[] costosCD = dijkstra.find_dijkstra(matrizAdyacencia, i);
+            for (int j = 0; j < 50; j++) {
+                matrizCostos[i-50][j] = costosCD[j];
+            }
+        }
 
-        DijkstraOnline dijkstra = new DijkstraOnline();
-        dijkstra.dijkstra(g.getmAdy(), 50);
-
-        // probar dijkstra con este grafo
-//        GrafoTDA grafo = new GrafoMA();
-//        grafo.InicializarGrafo();
-//        grafo.AgregarVertice(0);
-//        grafo.AgregarVertice(1);
-//        grafo.AgregarVertice(2);
-//        grafo.AgregarVertice(3);
-//        grafo.AgregarVertice(4);
-//        grafo.AgregarVertice(5);
-//        grafo.AgregarVertice(6);
-//        grafo.AgregarVertice(7);
-//        grafo.AgregarArista(0,1,5);
-//        grafo.AgregarArista(1,0,5);
-//        grafo.AgregarArista(1,2,9);
-//        grafo.AgregarArista(2,1,9);
-//        grafo.AgregarArista(2,3,6);
-//        grafo.AgregarArista(3,2,6);
-//        grafo.AgregarArista(3,1,2);
-//        grafo.AgregarArista(1,3,2);
-//        grafo.AgregarArista(2,0,8);
-//        grafo.AgregarArista(0,2,8);
-//        grafo.AgregarArista(3,4,1);
-//        grafo.AgregarArista(4,1,1);
-//        grafo.AgregarArista(4,0,6);
-//        grafo.AgregarArista(0,4,6);
-//        grafo.AgregarArista(3,5,9);
-//        grafo.AgregarArista(5,3,9);
-//        grafo.AgregarArista(5,6,4);
-//        grafo.AgregarArista(6,5,4);
-//        grafo.AgregarArista(6,7,3);
-//        grafo.AgregarArista(7,6,3);
-//        grafo.AgregarArista(7,0,3);
-//        grafo.AgregarArista(0,7,3);
-//        grafo.AgregarArista(6,0,5);
-//        grafo.AgregarArista(0,6,5);
-//        GrafoTDA grafoDijkstra2 = dijkstra.CalcularDijkstra(grafo, 0);
-//        MostrarDijkstra(grafoDijkstra2, 0);
     }
 
     public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
         int costoAnual = Integer.MAX_VALUE;
         PriorityQueue<Nodo> colaP = new PriorityQueue<>();
-        colaP.add(new Nodo(u, CalcularC(costosCD1, costoFijoCentro, 1)));
+        colaP.add(new Nodo(List.of(0,0,0), u, CalcularC(costosCD1, costoFijoCentro, 1)));
         while (!colaP.isEmpty()) {
             // calcular redMin redMax
         }

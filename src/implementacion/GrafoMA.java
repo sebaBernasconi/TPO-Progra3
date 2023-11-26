@@ -8,7 +8,7 @@ public class GrafoMA implements GrafoTDA {
 	int[][] mAdy;
 	int[] etiqs;
 	int cant;
-	int tam = 59;
+	int tam = 58;
 
 	@Override
 	public void InicializarGrafo() {

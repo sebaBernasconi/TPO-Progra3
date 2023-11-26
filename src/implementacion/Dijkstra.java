@@ -1,106 +1,78 @@
 package implementacion;
 
-import interfaz.ConjuntoTDA;
-import interfaz.GrafoTDA;
+import java.lang.*;
 
 public class Dijkstra {
-    public GrafoTDA CalcularDijkstra(GrafoTDA grafo, int partida) {
-        int verticeActual;
-        int verticeAux;
-        int verticeMenorPeso;
-        int menorPeso;
+    // A utility function to find the vertex with minimum distance value,
+    // from the set of vertices not yet included in shortest path tree
+    static final int V = 58;
 
-        //creamos el grafo que vamos a devolver y agregamos el vertice que va a
-        //el punto de partida. Ademas creamos un conjunto donde agregamos todos los
-        //vertices del grafo original y sacamos el punto de partida
-        GrafoTDA grafoArania = new GrafoMA();
-        grafoArania.InicializarGrafo();
-        grafoArania.AgregarVertice(partida);
+    private int minDistance(int dist[], Boolean sptSet[]) {
+        // Initialize min value
+        int min = Integer.MAX_VALUE, min_index = -1;
 
-        ConjuntoTDA verticesGrafoOriginal = grafo.Vertices();
-        verticesGrafoOriginal.SacarElemento(partida);
-
-        //elegimos uno de los vertices del conjunto de vertices del grafo original
-        // y lo sacamos del conjunto hasta que se vacie. Ademas lo agregamos al grafo que vamos a devolver y
-        //preguntamos si existe una arista directa entre el punto de partida y el vertice
-        //que sacamos del conjunto para usarla para comparar
-        while (!verticesGrafoOriginal.ConjuntoVacio()) {
-            verticeActual = verticesGrafoOriginal.Elegir();
-            verticesGrafoOriginal.SacarElemento(verticeActual);
-            grafoArania.AgregarVertice(verticeActual);
-            if (grafo.ExisteArista(partida, verticeActual)) {
-                grafoArania.AgregarArista(partida, verticeActual, grafo.PesoArista(partida, verticeActual));
-            }
-        }
-        //volvemos a llenar el conjunto de vertices del grafo original para
-        //para empezar a buscar los caminos mas cortos desde el punto de partida.
-        //Ademas creamos un conjunto con los que ya visitamos que en este caso serian
-        //los vertices para los que ya se encontro el camino mas corto desde el punto de partida
-        ConjuntoTDA VerticeGrafoOriginal = grafo.Vertices();
-        VerticeGrafoOriginal.SacarElemento(partida);
-        ConjuntoTDA verticesVisitados = new ConjuntoTA();
-        verticesVisitados.InicializarConjunto();
-
-
-        while (!VerticeGrafoOriginal.ConjuntoVacio()) {
-
-            menorPeso = 0;
-            verticeMenorPeso = 0;
-            while (!VerticeGrafoOriginal.ConjuntoVacio()) {
-
-                //en este while lo que hacemos es elegir un vertice y
-                //agregarlo al conj de visitados. Ademas preguntamos si
-                //existe una arista directa desde el punto de partida y el vertice que eligio
-                //y ademas si el camino mas corto vale 0 o si el camino mas corto es mayor
-                //al del peso de la arista entre el punto de partida y el vertice actual.
-                //en caso de que las condiciones se cumplan se modifica el peso de la arista
-                //entre el punto de partida y el vertice que se eligio y se asigna el vertice a
-                //la variable que contiene al vertice con el menor peso
-
-                verticeAux = VerticeGrafoOriginal.Elegir();
-                VerticeGrafoOriginal.SacarElemento(verticeAux);
-                verticesVisitados.AgregarElemento(verticeAux);
-                if ((grafoArania.ExisteArista(partida , verticeAux)) && (menorPeso == 0 || (menorPeso > grafoArania.PesoArista(partida, verticeAux)))) {
-                    menorPeso = grafoArania.PesoArista(partida, verticeAux);
-                    verticeMenorPeso = verticeAux;
-                }
+        for (int v = 0; v < V; v++)
+            if (sptSet[v] == false && dist[v] <= min) {
+                min = dist[v];
+                min_index = v;
             }
 
-            if (verticeMenorPeso != 0) {
-                verticesVisitados.SacarElemento(verticeMenorPeso);
+        return min_index;
+    }
 
-                while (!verticesVisitados.ConjuntoVacio()) {
-                    verticeAux = verticesVisitados.Elegir();
-                    verticesVisitados.SacarElemento(verticeAux);
-                    VerticeGrafoOriginal.AgregarElemento(verticeAux);
+    // A utility function to print the constructed distance array
+    private void printSolution(int dist[], int src) {
+        System.out.println("Source vertex: " + src);
+        System.out.println(
+                "Vertex \t\t Distance from Source");
+        for (int i = 0; i < V; i++)
+            System.out.println(i + " \t\t\t\t " + dist[i]);
+    }
 
-                    //elegimos el vertice del grafo y preguntamos si hay una arista entre
-                    //el vertice con menor peso y el vertice actual en el grafo original. si esto se cumple
-                    //pregunta si no hay una arista entre el punto de partida y el vertice actual en el grafo que devolvemos
-                    // si esto tambien se cumple agrega una arista al grafo que vamos a devolver
-                    //entre el punto de partida y el vertice actual y le pone el peso que hay desde
-                    //el punto de partida al vertice de menor peso + el peso que hay desde el vertice de menor peso
-                    //hasta el vertice actual.
+    // Function that implements Dijkstra's single source shortest path
+    // algorithm for a graph represented using adjacency matrix
+    // representation
+    public int[] find_dijkstra(int graph[][], int src) {
+        int dist[] = new int[V]; // The output array. dist[i] will hold
+        // the shortest distance from src to i
 
+        // sptSet[i] will true if vertex i is included in shortest
+        // path tree or shortest distance from src to i is finalized
+        Boolean sptSet[] = new Boolean[V];
 
-                    //si hay una arista entre el punto de partida y el vertice actual en el grafo que devolvemos(osea que ya esta visitada)
-                    //, pasa por el else que compara si el peso que actualmente es el menor > a otro de los posibles caminos y si lo es lo pisa
-                    //con el que ahora seria el mas corto.
-
-                    if (grafo.ExisteArista(verticeMenorPeso, verticeAux)) {
-                        if (!grafoArania.ExisteArista(partida, verticeAux)) {
-                            grafoArania.AgregarArista(partida, verticeAux, grafoArania.PesoArista(partida, verticeMenorPeso)+grafo.PesoArista(verticeMenorPeso, verticeAux));
-                        }
-                        else {
-                            if (grafoArania.PesoArista(partida, verticeAux) > grafoArania.PesoArista(partida, verticeMenorPeso)+grafo.PesoArista(verticeMenorPeso, verticeAux)) {
-                                grafoArania.AgregarArista(partida, verticeAux , grafoArania.PesoArista(partida, verticeMenorPeso)+grafo.PesoArista(verticeMenorPeso, verticeAux));
-                            }
-                        }
-                    }
-                }
-            }
+        // Initialize all distances as INFINITE and stpSet[] as false
+        for (int i = 0; i < V; i++) {
+            dist[i] = Integer.MAX_VALUE;
+            sptSet[i] = false;
         }
 
-        return grafoArania;
+        // Distance of source vertex from itself is always 0
+        dist[src] = 0;
+
+        // Find shortest path for all vertices
+        for (int count = 0; count < V - 1; count++) {
+            // Pick the minimum distance vertex from the set of vertices
+            // not yet processed. u is always equal to src in first
+            // iteration.
+            int u = minDistance(dist, sptSet);
+
+            // Mark the picked vertex as processed
+            sptSet[u] = true;
+
+            // Update dist value of the adjacent vertices of the
+            // picked vertex.
+            for (int v = 0; v < V; v++)
+
+                // Update dist[v] only if is not in sptSet, there is an
+                // edge from u to v, and total weight of path from src to
+                // v through u is smaller than current value of dist[v]
+                if (!sptSet[v] && graph[u][v] != 0 &&
+                        dist[u] != Integer.MAX_VALUE && dist[u] + graph[u][v] < dist[v])
+                    dist[v] = dist[u] + graph[u][v];
+        }
+
+        // print the constructed distance array
+//        printSolution(dist, src);
+        return dist;
     }
 }
