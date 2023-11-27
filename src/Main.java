@@ -8,17 +8,19 @@ import java.util.*;
 
 public class Main {
     static int u = Integer.MAX_VALUE;
+    static int[][] matrizCostos = new int[8][50];
+    static int[] costosFijosCentros = new int[8];
+    static int[] costosCentrosMuelle = new int[8];
 
-    public static void CalcularU(List<Integer>costosCentro, int[] costoFijoCentro, int centroEvaluado){
-        int valorCompar = 0;
-        for (Integer i:
-             costosCentro) {
-            valorCompar += i + costoFijoCentro[centroEvaluado]  ;
-        }
-
-        if(valorCompar < u){
-            u = valorCompar;
-        }
+    public static void CalcularU(List<Integer>centrosConsiderados){
+//        int valorCompar = 0;
+//        for (Integer i: costosCentro) {
+//            valorCompar += i + costoFijoCentro[centroEvaluado]  ;
+//        }
+//
+//        if(valorCompar < u){
+//            u = valorCompar;
+//        }
     }
     public static int CalcularC(List<Integer>costosCentro, int[] costoFijoCentro, int centroEvaluado){
         int c = 0;
@@ -83,14 +85,10 @@ public class Main {
     }
     public static void main(String[] args) {
 
-        int[][] matrizCostos = new int[8][50];
-
         GrafoTDA grafo = new GrafoMA();
         grafo.InicializarGrafo();
 
         int volumenProduccionClientes = 10;
-
-        int[] costoFijoCentros = {1900,1500,2000,2700,2500,3000,500};
 
         for (int i = 0; i< 50; i++){
             //agregando los 50 clientes al grafo
@@ -113,6 +111,23 @@ public class Main {
                 int v2 = Integer.parseInt(dataSplit[1]);
                 int peso = Integer.parseInt(dataSplit[2]);
                 grafo.AgregarArista(v1, v2, peso);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        try {
+            File archivoCentros = new File("centrosSinComentarios.txt");
+            Scanner sc = new Scanner(archivoCentros);
+            for (int i = 0; i < 8; i++) {
+                String data = sc.nextLine();
+                String[] dataSplit = data.split(",");
+                int costoCentroMuelle = Integer.parseInt(dataSplit[2]);
+                int costoFijoCentro = Integer.parseInt(dataSplit[3]);
+                costosCentrosMuelle[i] = costoCentroMuelle;
+                costosFijosCentros[i] = costoFijoCentro;
             }
         }
         catch (Exception e) {
