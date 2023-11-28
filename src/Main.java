@@ -8,24 +8,49 @@ import java.util.*;
 
 public class Main {
     static int u = Integer.MAX_VALUE;
-    static int[][] matrizCostos = new int[8][50];
-    static int[] costosFijosCentros = new int[8];
+    static final int cantCentros = 4;
+    static final int cantClientes = 5;
+    static int[][] matrizCostos;
+    static int[] costosFijosCentros;
     static int[] costosCentrosMuelle = new int[8];
 
-    public static void CalcularU(List<Integer>centrosConsiderados){
-//        int valorCompar = 0;
-//        for (Integer i: costosCentro) {
-//            valorCompar += i + costoFijoCentro[centroEvaluado]  ;
-//        }
-//
-//        if(valorCompar < u){
-//            u = valorCompar;
-//        }
+    public static int CalcularU(List<Integer>centrosConstruidos){
+        int costoU = 0;
+        for (int i = 0; i < cantClientes; i++) {
+            int min = Integer.MAX_VALUE;
+            for (Integer centro: centrosConstruidos) {
+                if (matrizCostos[centro][i] < min) {
+                    min = matrizCostos[centro][i];
+                }
+            }
+            costoU += min;
+        }
+        for (Integer centro: centrosConstruidos) {
+            costoU += costosFijosCentros[centro];
+        }
+        u = costoU;
+        return costoU;
     }
-    public static int CalcularC(List<Integer>costosCentro, int[] costoFijoCentro, int centroEvaluado){
-        int c = 0;
-        c = Collections.min(costosCentro) + costoFijoCentro[centroEvaluado];
-        return c;
+    public static int CalcularC(List<Integer>centrosConstruidos, List<Integer>centrosEventuales){
+        int costoC = 0;
+        for (int i = 0; i < cantClientes; i++) {
+            int min = Integer.MAX_VALUE;
+            for (Integer centro: centrosConstruidos) {
+                if (matrizCostos[centro][i] < min) {
+                    min = matrizCostos[centro][i];
+                }
+            }
+            for (Integer centro: centrosEventuales) {
+                if (matrizCostos[centro][i] < min) {
+                    min = matrizCostos[centro][i];
+                }
+            }
+            costoC += min;
+        }
+        for (Integer centro: centrosConstruidos) {
+            costoC += costosFijosCentros[centro];
+        }
+        return costoC;
     }
     public static int CalcularRedMin(int [][] costosClientes, int redMinmaAnterior,int centroEvaluado){
         int redMin = redMinmaAnterior;
@@ -101,60 +126,68 @@ public class Main {
         }
 
         //a continuacion se cargan todas las aristas("rutas") al grafo
-        try {
-            File archivoRutas = new File("rutasSinComentarios.txt");
-            Scanner sc = new Scanner(archivoRutas);
-            while (sc.hasNextLine()) {
-                String data = sc.nextLine();
-                String[] dataSplit = data.split(",");
-                int v1 = Integer.parseInt(dataSplit[0]);
-                int v2 = Integer.parseInt(dataSplit[1]);
-                int peso = Integer.parseInt(dataSplit[2]);
-                grafo.AgregarArista(v1, v2, peso);
-            }
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
+//        try {
+//            File archivoRutas = new File("rutasSinComentarios.txt");
+//            Scanner sc = new Scanner(archivoRutas);
+//            while (sc.hasNextLine()) {
+//                String data = sc.nextLine();
+//                String[] dataSplit = data.split(",");
+//                int v1 = Integer.parseInt(dataSplit[0]);
+//                int v2 = Integer.parseInt(dataSplit[1]);
+//                int peso = Integer.parseInt(dataSplit[2]);
+//                grafo.AgregarArista(v1, v2, peso);
+//            }
+//        }
+//        catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            File archivoCentros = new File("centrosSinComentarios.txt");
+//            Scanner sc = new Scanner(archivoCentros);
+//            for (int i = 0; i < 8; i++) {
+//                String data = sc.nextLine();
+//                String[] dataSplit = data.split(",");
+//                int costoCentroMuelle = Integer.parseInt(dataSplit[1]);
+//                int costoFijoCentro = Integer.parseInt(dataSplit[2]);
+//                costosCentrosMuelle[i] = costoCentroMuelle;
+//                costosFijosCentros[i] = costoFijoCentro;
+//            }
+//        }
+//        catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//        }
 
-        try {
-            File archivoCentros = new File("centrosSinComentarios.txt");
-            Scanner sc = new Scanner(archivoCentros);
-            for (int i = 0; i < 8; i++) {
-                String data = sc.nextLine();
-                String[] dataSplit = data.split(",");
-                int costoCentroMuelle = Integer.parseInt(dataSplit[2]);
-                int costoFijoCentro = Integer.parseInt(dataSplit[3]);
-                costosCentrosMuelle[i] = costoCentroMuelle;
-                costosFijosCentros[i] = costoFijoCentro;
-            }
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
+//        Dijkstra  dijkstra= new Dijkstra();
+//        int[][] matrizAdyacencia = grafo.getmAdy();
+//
+//        for (int i = 50; i < 58; i++){
+//            int[] costosCD = dijkstra.find_dijkstra(matrizAdyacencia, i);
+//            for (int j = 0; j < 50; j++) {
+//                matrizCostos[i-50][j] = costosCD[j];
+//            }
+//        }
+        costosFijosCentros = new int[]{4, 6, 6, 8};
+        matrizCostos = new int[][]{
+                {3, 10, 8, 18, 14},
+                {9, 4, 6, 5, 5},
+                {12, 6, 10, 4, 8},
+                {8, 6, 5, 12, 9}
+        };
 
-        Dijkstra  dijkstra= new Dijkstra();
-        int[][] matrizAdyacencia = grafo.getmAdy();
-
-        for (int i = 50; i < 58; i++){
-            int[] costosCD = dijkstra.find_dijkstra(matrizAdyacencia, i);
-            for (int j = 0; j < 50; j++) {
-                matrizCostos[i-50][j] = costosCD[j];
-            }
-        }
-
+        System.out.println("U y C para el primer centro construido: " + CalcularU(List.of(0)) + " :: " + CalcularC(List.of(0), List.of(1,2,3)));
     }
 
-    public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
-        int costoAnual = Integer.MAX_VALUE;
-        PriorityQueue<Nodo> colaP = new PriorityQueue<>();
-        colaP.add(new Nodo(List.of(0,0,0), u, CalcularC(costosCD1, costoFijoCentro, 1)));
-        while (!colaP.isEmpty()) {
-            // calcular redMin redMax
-        }
-        return costoAnual;
-
-    }
+//    public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
+//        int costoAnual = Integer.MAX_VALUE;
+//        PriorityQueue<Nodo> colaP = new PriorityQueue<>();
+//        colaP.add(new Nodo(List.of(0,0,0), u, CalcularC(costosCD1, costoFijoCentro, 1)));
+//        while (!colaP.isEmpty()) {
+//            // calcular redMin redMax
+//        }
+//        return costoAnual;
+//
+//    }
 }
