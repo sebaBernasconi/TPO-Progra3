@@ -61,11 +61,9 @@ public class Main {
             int segundoMin = Integer.MAX_VALUE;
             for(int j = 0; j < cantCentros; j++){
                 //recorremos todos los centros
-                if (matrizCostos[j][i] < min && j == 0){
-                    min = matrizCostos[j][i];
-                    segundoMin = matrizCostos[j][i];
-                } else if (matrizCostos[j][i] < min) {
-                    min = matrizCostos[j][i];
+                if (matrizCostos[j][i] < min) {
+                   segundoMin = min;
+                   min = matrizCostos[j][i];
                 } else if (matrizCostos[j][i] < segundoMin && matrizCostos[j][i] != min){
                     segundoMin = matrizCostos[j][i];
                 }
@@ -190,7 +188,7 @@ public class Main {
         };
 
         System.out.println("U y C para el primer centro construido: " + CalcularU(List.of(0)) + " :: " + CalcularC(List.of(0), List.of(1,2,3)));
-        System.out.println("Red min?-->" + CalcularRedMin(2));
+        System.out.println("Red min?-->" + CalcularRedMin(3));
     }
 
 //    public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
