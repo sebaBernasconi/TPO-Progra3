@@ -54,7 +54,8 @@ public class Main {
     }
     public static int CalcularRedMin(int centroAEvaluer){
         int redMin = 0;
-
+        //falta contemplar un caso.
+        //evalua centros construidos o posibles. los no construidos NO LOS EVALUA
         for (int i = 0; i < cantClientes; i ++){
             //para cada columna
             int min = Integer.MAX_VALUE;
