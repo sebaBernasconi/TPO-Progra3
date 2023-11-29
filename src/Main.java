@@ -52,26 +52,26 @@ public class Main {
         }
         return costoC;
     }
-    public static int CalcularRedMin(int centroEvaluado, List<Integer> centrosConstruidos){
+    public static int CalcularRedMin(int centroEvaluado, List<Integer> centrosConsiderados){
         int redMin = 0;
         //falta contemplar un caso.
         //evalua centros construidos o posibles. los no construidos NO LOS EVALUA
         for (int i = 0; i < cantClientes; i ++){
             //para cada columna
-            int min = Integer.MAX_VALUE;
+            int valorCentroEvaluado = matrizCostos[centroEvaluado][i];
             int segundoMin = Integer.MAX_VALUE;
-            for(Integer centro: centrosConstruidos){
+            for(Integer centro: centrosConsiderados){
                 //recorremos todos los centros
-                if (matrizCostos[centro][i] < min) {
-                   segundoMin = min;
-                   min = matrizCostos[centro][i];
-                } else if (matrizCostos[centro][i] < segundoMin && matrizCostos[centro][i] != min){
+                if (matrizCostos[centro][i] < valorCentroEvaluado) {
+                    valorCentroEvaluado = -1;
+                    break;
+                }
+                else if (matrizCostos[centro][i] < segundoMin){
                     segundoMin = matrizCostos[centro][i];
                 }
             }
-            if (matrizCostos[centroEvaluado][i] == min){
-                redMin += segundoMin - min;
-
+            if (matrizCostos[centroEvaluado][i] == valorCentroEvaluado){
+                redMin += segundoMin - valorCentroEvaluado;
             }
 
         }
@@ -195,15 +195,15 @@ public class Main {
 //        }
         costosFijosCentros = new int[]{4, 6, 6, 8};
         matrizCostos = new int[][]{
-                {3, 10, 8, 18, 14},
-                {9, 4, 6, 5, 5},
-                {12, 6, 10, 4, 8},
-                {8, 6, 5, 12, 9}
+                {3,     10,      8,     18,     14},
+                {9,     4,      6,      5,      5},
+                {12,    6,      10,     4,      8},
+                {8,     6,      5,      12,     9}
         };
 
         System.out.println("U y C para el primer centro construido: " + CalcularU(List.of(0)) + " :: " + CalcularC(List.of(0), List.of(1,2,3)));
-        System.out.println("Red min-->" + CalcularRedMin(3, List.of(0,1,2,3)));
-        System.out.println("Red max-->" + CalcularRedMax(3, List.of(0,1,2,3)));
+        System.out.println("Red min -->" + CalcularRedMin(1, List.of(0,1,2)));
+        System.out.println("Red max -->" + CalcularRedMax(1, List.of(0,1,2,3)));
     }
 
 //    public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
