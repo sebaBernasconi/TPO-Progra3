@@ -70,17 +70,30 @@ public class Main {
                 }
             }
             if (matrizCostos[centroEvaluado][i] == min){
-               System.out.println("actual comparado con min -->" + matrizCostos[centroEvaluado][i] + "min -->" + min);
                 redMin += segundoMin - min;
-                System.out.println("RedMin parcial -->" + redMin);
+
             }
 
         }
 
         return redMin;
     }
-    public static int CalcularRedMax(List<Integer>costosCentro){
+    public static int CalcularRedMax(int centroEvaluado, List<Integer>centrosConstruidos){
         int redMax = 0;
+        //la primera pasada agarro el maximo y despues comparo con los centros construidos
+        for (int i = 0; i < cantClientes;i ++){
+            int max = 0;
+            //if grande si no hay centros construidos? y un else que si ya los hay busque el minimo de los construidos?
+            for (int j = 0; j < cantCentros;j++){
+                if (matrizCostos[j][i] > max){ //&& matrizCostos[J][i] != fila de centro construido
+                    max = matrizCostos[j][i];
+                }//else if(si ya hay un centro construido)
+            }
+            if (matrizCostos[centroEvaluado][i] != max){ //&& no hay ningun centro construido
+                redMax += max - matrizCostos[centroEvaluado][i];
+            }//else if (si ya hay un centro consturido)
+        }
+
 
         return redMax;
     }
@@ -189,7 +202,8 @@ public class Main {
         };
 
         System.out.println("U y C para el primer centro construido: " + CalcularU(List.of(0)) + " :: " + CalcularC(List.of(0), List.of(1,2,3)));
-        System.out.println("Red min?-->" + CalcularRedMin(3, List.of(0,1)));
+        System.out.println("Red min-->" + CalcularRedMin(3, List.of(0,1,2,3)));
+        System.out.println("Red max-->" + CalcularRedMax(3, List.of(0,1,2,3)));
     }
 
 //    public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
