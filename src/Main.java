@@ -52,7 +52,7 @@ public class Main {
         }
         return costoC;
     }
-    public static int CalcularRedMin(int centroAEvaluer){
+    public static int CalcularRedMin(int centroEvaluado, List<Integer> centrosConstruidos){
         int redMin = 0;
         //falta contemplar un caso.
         //evalua centros construidos o posibles. los no construidos NO LOS EVALUA
@@ -60,17 +60,17 @@ public class Main {
             //para cada columna
             int min = Integer.MAX_VALUE;
             int segundoMin = Integer.MAX_VALUE;
-            for(int j = 0; j < cantCentros; j++){
+            for(Integer centro: centrosConstruidos){
                 //recorremos todos los centros
-                if (matrizCostos[j][i] < min) {
+                if (matrizCostos[centro][i] < min) {
                    segundoMin = min;
-                   min = matrizCostos[j][i];
-                } else if (matrizCostos[j][i] < segundoMin && matrizCostos[j][i] != min){
-                    segundoMin = matrizCostos[j][i];
+                   min = matrizCostos[centro][i];
+                } else if (matrizCostos[centro][i] < segundoMin && matrizCostos[centro][i] != min){
+                    segundoMin = matrizCostos[centro][i];
                 }
             }
-            if (matrizCostos[centroAEvaluer][i] == min){
-               System.out.println("actual comparado con min -->" + matrizCostos[centroAEvaluer][i] + "min -->" + min);
+            if (matrizCostos[centroEvaluado][i] == min){
+               System.out.println("actual comparado con min -->" + matrizCostos[centroEvaluado][i] + "min -->" + min);
                 redMin += segundoMin - min;
                 System.out.println("RedMin parcial -->" + redMin);
             }
@@ -189,7 +189,7 @@ public class Main {
         };
 
         System.out.println("U y C para el primer centro construido: " + CalcularU(List.of(0)) + " :: " + CalcularC(List.of(0), List.of(1,2,3)));
-        System.out.println("Red min?-->" + CalcularRedMin(3));
+        System.out.println("Red min?-->" + CalcularRedMin(3, List.of(0,1)));
     }
 
 //    public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
