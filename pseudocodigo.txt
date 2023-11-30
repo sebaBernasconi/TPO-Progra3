@@ -106,3 +106,58 @@ Algoritmo CalculoCostos
         Devolver redMax
     Fin Función
 Fin Algoritmo
+
+
+procedimiento QueCentrosConstruyo:
+    Entrada: centros : arreglo de numeros enteros
+    Salida: nada
+    Imprimir("Se construyen los centros: ")
+    Para i=0 hasta cantCentros-1:
+        Si centros[i] = 1 entonces:
+            Imprimir("Centro: " + i)
+	fin si
+    fin para
+
+    Imprimir("Arreglo x final: ")
+    Para i =0 a hasta cantCentros-1:
+        Si i =7 entonces:
+            Imprimir(centros[i])
+        fin si
+        Sino entonces:
+            Imprimir(centros[i] + ", ")
+        fin sino
+   fin para
+
+    ImprimirNuevaLinea()
+Finprocedimiento
+
+
+
+Procedimiento CentroPorCliente(centros):
+entrada: centros: arreglo de numeros enteros
+salida: nada
+    centrosConstruidosFinales ← Crear nueva Lista de numeros enteros
+
+    Para i=0 hasta cantCentros-1:
+        Si centros[i] = 1 entonces:
+            Agregar i a centrosConstruidosFinales
+        fin si
+    fin para
+
+    Para cada cliente de 0 a cantClientes:
+        posicionCentroCostoMinimo ← -1
+        min ← ValorMuyGrande
+        Para cada centro j en centrosConstruidosFinales:
+            Si matrizCostos[j][cliente] < min entonces:
+                min ← matrizCostos[j][cliente]
+                posicionCentroCostoMinimo ← j
+            fin si
+        fin para
+       Imprimir("El cliente " + cliente + " entrega su mercadería al centro: " + posicionCentroCostoMinimo +
+                 ", con costo " + matrizCostos[posicionCentroCostoMinimo][cliente])
+    fin para
+
+FinProcedimiento
+
+
+
