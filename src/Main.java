@@ -221,14 +221,14 @@ public class Main {
         System.out.println("Red max -->" + CalcularRedMax(3, null, List.of(0,1)));
     }
 
-//    public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
-//        int costoAnual = Integer.MAX_VALUE;
-//        PriorityQueue<Nodo> colaP = new PriorityQueue<>();
-//        colaP.add(new Nodo(List.of(0,0,0), u, CalcularC(costosCD1, costoFijoCentro, 1)));
-//        while (!colaP.isEmpty()) {
-//            // calcular redMin redMax
-//        }
-//        return costoAnual;
-//
-//    }
+    public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
+        int costoAnual = Integer.MAX_VALUE;
+        PriorityQueue<Nodo> colaP = new PriorityQueue<>();
+        colaP.add(new Nodo(List.of(0,0,0), u, CalcularC(costosCD1, costoFijoCentro, 1)));
+        while (!colaP.isEmpty()) {
+            // calcular redMin redMax
+        }
+        return costoAnual;
+
+    }
 }
