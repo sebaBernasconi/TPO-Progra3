@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Nodo implements Comparable<Nodo>{
 
-	public List<Integer> x;
+	public int[] x;
 	public int u;
 	public int c;
 
@@ -13,8 +13,8 @@ public class Nodo implements Comparable<Nodo>{
 
 	public int redMax;
 
-	public Nodo(List<Integer> x, int u, int c) {
-		this.x = new ArrayList<>();
+	public Nodo(int[] x, int u, int c) {
+		this.x = x;
 		this.u = u;
 		this.c = c;
 	}
