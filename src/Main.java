@@ -7,12 +7,12 @@ import java.util.*;
 
 
 public class Main {
-    static int u = Integer.MAX_VALUE;
     static final int cantCentros = 4;
     static final int cantClientes = 5;
+    static int[] volumenProduccionClientes;
     static int[][] matrizCostos;
     static int[] costosFijosCentros;
-    static int[] costosCentrosMuelle = new int[8];
+    static int[] costosCentrosAlPuerto = new int[cantCentros];
 
     public static int CalcularU(List<Integer>centrosConstruidos){
         int costoU = 0;
@@ -28,10 +28,9 @@ public class Main {
         for (Integer centro: centrosConstruidos) {
             costoU += costosFijosCentros[centro];
         }
-        u = costoU;
         return costoU;
     }
-    public static int CalcularC(List<Integer>centrosConstruidos, List<Integer>centrosEventuales){
+    public static int CalcularC(List<Integer>centrosConstruidos, List<Integer>centrosConsiderados){
         int costoC = 0;
         for (int i = 0; i < cantClientes; i++) {
             int min = Integer.MAX_VALUE;
@@ -40,7 +39,7 @@ public class Main {
                     min = matrizCostos[centro][i];
                 }
             }
-            for (Integer centro: centrosEventuales) {
+            for (Integer centro: centrosConsiderados) {
                 if (matrizCostos[centro][i] < min) {
                     min = matrizCostos[centro][i];
                 }
@@ -216,19 +215,235 @@ public class Main {
                 {8,     6,      5,      12,     9}
         };
 
-        System.out.println("U y C para el primer centro construido: " + CalcularU(List.of(0)) + " :: " + CalcularC(List.of(0), List.of(1,2,3)));
-        System.out.println("Red min -->" + CalcularRedMin(1, List.of(0,1,2)));
-        System.out.println("Red max -->" + CalcularRedMax(3, null, List.of(0,1)));
+        int[] x = CalcularCostoAnual();
+        for (int i = 0; i < x.length; i++) {
+            System.out.print(x[i] + ", ");
+        }
     }
 
-    public static int CalcularCostoAnual(List<Integer> costosCD1, int[] costoFijoCentro) {
-        int costoAnual = Integer.MAX_VALUE;
-        PriorityQueue<Nodo> colaP = new PriorityQueue<>();
-        colaP.add(new Nodo(List.of(0,0,0), u, CalcularC(costosCD1, costoFijoCentro, 1)));
-        while (!colaP.isEmpty()) {
-            // calcular redMin redMax
-        }
-        return costoAnual;
+    public static int[] CalcularCostoAnual() {
+        /*
+            creamos el nodo raiz y le calculamos U y C.
+            Evaluar si C > U lo descarto y lo saco de la cola
+            Sino calculo red min
+            Si redmin < costo fijo -> calculo red max
+            Si red min > costo fijo -> construyo
 
+            Si red max > costo fijo -> evaluo las dos opciones y meto los nuevos nodos en la cola de prioridad
+            Si red max < costo fijo -> no construyo
+            repetir
+        */
+        int costoAnual = -1;
+        int[] x = new int[cantCentros];
+        PriorityQueue<Nodo> colaP = new PriorityQueue<>();
+        List<Integer> centrosConstruidos = new ArrayList<>();
+        List<Integer> centrosConsiderados = new ArrayList<>();
+        // loop para agregar los centros a la lista de centros considerados
+        for (int i = 0; i < cantCentros; i++) {
+            centrosConsiderados.add(i);
+        }
+        int centroEvaluado = 0;
+        int c = -1;
+        int u = Integer.MAX_VALUE;
+        Nodo raiz = new Nodo(x, u, CalcularC(centrosConstruidos, centrosConsiderados));
+        colaP.add(raiz);
+        while (u != c) {
+            Nodo nodoEvaluado = colaP.poll();
+            // limpiamos los centros construidos y considerados para el nodo que vamos a evaluar
+            centrosConstruidos.clear();
+            centrosConsiderados.clear();
+            // le asignamos los centros construidos y considerados segun el vector x devuelto por el nodo anterior
+            for (int i = 0; i < cantCentros; i++) {
+                if (nodoEvaluado.x[i] == 1) {
+                    centrosConstruidos.add(i);
+                }
+                else if (nodoEvaluado.x[i] == 0){
+                    if (i == centroEvaluado) {
+                        continue;
+                    }
+                    centrosConsiderados.add(i);
+                }
+            }
+            // Si c < u sigo evaluando las opciones
+            if (nodoEvaluado.c < nodoEvaluado.u) {
+                nodoEvaluado.redMin = CalcularRedMin(centroEvaluado, centrosConsiderados);
+                // si red min > costo fijo centro construyo directamente
+                if (nodoEvaluado.redMin > costosFijosCentros[centroEvaluado]) {
+                    nodoEvaluado.x[centroEvaluado] = 1;      // asigno 1 a x para saber que construi
+                    // limpiamos los centros construidos y considerados para el nodo que vamos a evaluar
+                    centrosConstruidos.clear();
+                    centrosConsiderados.clear();
+                    // le asignamos los centros construidos y considerados segun el vector x devuelto por el nodo anterior
+                    for (int i = 0; i < cantCentros; i++) {
+                        if (nodoEvaluado.x[i] == 1) {
+                            centrosConstruidos.add(i);
+                        }
+                        else if (nodoEvaluado.x[i] == 0){
+                            if (i == centroEvaluado) {
+                                continue;
+                            }
+                            centrosConsiderados.add(i);
+                        }
+                    }
+
+                    int uTemp = CalcularU(centrosConstruidos);  // calculo u y c para asignarselo al nuevo nodo
+                    c = CalcularC(centrosConstruidos, centrosConsiderados);
+                    if (uTemp < u) {
+                        u = uTemp;
+                        Nodo siguiente = new Nodo(nodoEvaluado.x, u, c);
+                        colaP.add(siguiente);
+                    }
+                    else {
+                        Nodo siguiente = new Nodo(nodoEvaluado.x, uTemp, c);
+                        colaP.add(siguiente);
+                    }
+                    centroEvaluado++;
+                }
+                else {
+                    nodoEvaluado.redMax = CalcularRedMax(centroEvaluado, centrosConsiderados, centrosConstruidos);
+                    // si red max < costo fijo centro no construyo
+                    if (nodoEvaluado.redMax < costosFijosCentros[centroEvaluado]) {
+                        nodoEvaluado.x[centroEvaluado] = -1;
+                        // limpiamos los centros construidos y considerados para el nodo que vamos a evaluar
+                        centrosConstruidos.clear();
+                        centrosConsiderados.clear();
+                        // le asignamos los centros construidos y considerados segun el vector x devuelto por el nodo anterior
+                        for (int i = 0; i < cantCentros; i++) {
+                            if (nodoEvaluado.x[i] == 1) {
+                                centrosConstruidos.add(i);
+                            }
+                            else if (nodoEvaluado.x[i] == 0){
+                                if (i == centroEvaluado) {
+                                    continue;
+                                }
+                                centrosConsiderados.add(i);
+                            }
+                        }
+
+                        int uTemp = CalcularU(centrosConstruidos);      // calculo u y c para asignarselo al nuevo nodo
+                        c = CalcularC(centrosConstruidos, centrosConsiderados);
+                        if (uTemp < u) {
+                            u = uTemp;
+                            Nodo siguiente = new Nodo(nodoEvaluado.x, u, c);
+                            colaP.add(siguiente);
+                        }
+                        else {
+                            Nodo siguiente = new Nodo(nodoEvaluado.x, uTemp, c);
+                            colaP.add(siguiente);
+                        }
+                        centroEvaluado++;
+                    }
+                    else {
+                        int[] xConstruyo = new int[cantCentros];
+                        for (int i = 0; i < cantCentros; i++) {
+                            xConstruyo[i] = nodoEvaluado.x[i];
+                        }
+                        // asignamos la primera opcion de construir el centro
+                        xConstruyo[centroEvaluado] = 1;
+
+                        // limpiamos los centros construidos y considerados para el nodo que vamos a evaluar
+                        centrosConstruidos.clear();
+                        centrosConsiderados.clear();
+                        // le asignamos los centros construidos y considerados segun el vector x devuelto por el nodo anterior
+                        for (int i = 0; i < cantCentros; i++) {
+                            if (xConstruyo[i] == 1) {
+                                centrosConstruidos.add(i);
+                            }
+                            else if (xConstruyo[i] == 0){
+                                if (i == centroEvaluado) {
+                                    continue;
+                                }
+                                centrosConsiderados.add(i);
+                            }
+                        }
+
+                        int uConstruido = CalcularU(centrosConstruidos);      // calculo u y c para asignarselo al nuevo nodo
+                        c = CalcularC(centrosConstruidos, centrosConsiderados);
+                        if (uConstruido < u) {
+                            u = uConstruido;
+                            Nodo construyo = new Nodo(xConstruyo, u, c);
+                            colaP.add(construyo);
+                        }
+                        else {
+                            Nodo construyo = new Nodo(xConstruyo, uConstruido, c);
+                            colaP.add(construyo);
+                        }
+
+
+
+                        int[] xNoConstruyo = new int[cantCentros];
+                        for (int i = 0; i < cantCentros; i++) {
+                            xNoConstruyo[i] = nodoEvaluado.x[i];
+                        }
+                        // asignamos la primera opcion de construir el centro
+                        xNoConstruyo[centroEvaluado] = -1;
+
+                        // limpiamos los centros construidos y considerados para el nodo que vamos a evaluar
+                        centrosConstruidos.clear();
+                        centrosConsiderados.clear();
+                        // le asignamos los centros construidos y considerados segun el vector x devuelto por el nodo anterior
+                        for (int i = 0; i < cantCentros; i++) {
+                            if (xNoConstruyo[i] == 1) {
+                                centrosConstruidos.add(i);
+                            }
+                            else if (xNoConstruyo[i] == 0){
+                                if (i == centroEvaluado) {
+                                    continue;
+                                }
+                                centrosConsiderados.add(i);
+                            }
+                        }
+
+                        int uNoConstruido = CalcularU(centrosConstruidos);      // calculo u y c para asignarselo al nuevo nodo
+                        c = CalcularC(centrosConstruidos, centrosConsiderados);
+                        if (uNoConstruido < u) {
+                            u = uNoConstruido;
+                            Nodo construyo = new Nodo(xNoConstruyo, u, c);
+                            colaP.add(construyo);
+                        }
+                        else {
+                            Nodo noConstruyo = new Nodo(xNoConstruyo, uNoConstruido, c);
+                            colaP.add(noConstruyo);
+                        }
+
+                        centroEvaluado++;
+                    }
+                }
+            }
+            // Si c > u hago la poda, y no construyo
+            else {
+                nodoEvaluado.x[centroEvaluado] = -1;
+                // limpiamos los centros construidos y considerados para el nodo que vamos a evaluar
+                centrosConstruidos.clear();
+                centrosConsiderados.clear();
+                // le asignamos los centros construidos y considerados segun el vector x devuelto por el nodo anterior
+                for (int i = 0; i < cantCentros; i++) {
+                    if (nodoEvaluado.x[i] == 1) {
+                        centrosConstruidos.add(i);
+                    }
+                    else if (nodoEvaluado.x[i] == 0){
+                        if (i == centroEvaluado) {
+                            continue;
+                        }
+                        centrosConsiderados.add(i);
+                    }
+                }
+
+                int uTemp = CalcularU(centrosConstruidos);      // calculo u y c para asignarselo al nuevo nodo
+                c = CalcularC(centrosConstruidos, centrosConsiderados);
+                if (uTemp < u) {
+                    u = uTemp;
+                    Nodo siguiente = new Nodo(nodoEvaluado.x, u, c);
+                    colaP.add(siguiente);
+                }
+                else {
+                    Nodo siguiente = new Nodo(nodoEvaluado.x, uTemp, c);
+                    colaP.add(siguiente);
+                }
+                centroEvaluado++;
+            }
+        }
+
+        return x;
     }
 }
