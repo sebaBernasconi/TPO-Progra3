@@ -1,0 +1,108 @@
+Algoritmo CalculoCostos
+    u ← infinito
+    const cantCentros ← numero entero
+    const cantClientes ← numero entero
+    matrizCostos ← Matriz de numeros enteros
+    costosFijosCentros ← arreglo de numeros enteros
+    costosCentrosMuelle ← Arreglo de numeros enetros
+
+    Función CalcularU
+	Entrada: centrosConstruidos: vector <numeros entero>
+	Salida: CostoU : numero entero
+        costoU ← 0
+        Para i = 0 Hasta cantClientes - 1 
+            min ← infinito
+            Para cada centro en centrosConstruidos
+                Si matrizCostos[centro][i] < min Entonces
+                    min ← matrizCostos[centro][i]
+                Fin Si
+            Fin Para
+            costoU ← costoU + min
+        Fin Para
+        Para cada centro en centrosConstruidos 
+            costoU ← costoU + costosFijosCentros[centro]
+        Fin Para
+        u ← costoU
+        Devolver costoU
+    Fin Función
+
+    Función CalcularC
+	Entrada: centrosConstruidos:vector de <numeros enteros> , centrosEventuales : vector <numeros enteros>
+	Salida: CostoC : numero entero
+        costoC ← 0
+        Para i = 0 Hasta cantClientes - 1 
+            min ← infinito
+            Para cada centro en centrosConstruidos 
+                Si matrizCostos[centro][i] < min Entonces
+                    min ← matrizCostos[centro][i]
+                Fin Si
+            Fin Para
+            Para cada centro en centrosEventuales 
+                Si matrizCostos[centro][i] < min Entonces
+                    min ← matrizCostos[centro][i]
+                Fin Si
+            Fin Para
+            costoC ← costoC + min
+        Fin Para
+        Para cada centro en centrosConstruidos
+            costoC ← costoC + costosFijosCentros[centro]
+        Fin Para
+        Devolver costoC
+    Fin Función
+
+    Función CalcularRedMin
+	Entrada: centroEvaluado: numero entero , centrosConsiderados: vector <numeros enteros>
+	Salida: RedMin : numero entero
+        redMin ← 0
+        Para i = 0 Hasta cantClientes - 1 
+            valorCentroEvaluado ← matrizCostos[centroEvaluado][i]
+            segundoMin ← infinito
+            Para cada centro en centrosConsiderados 
+                Si matrizCostos[centro][i] < valorCentroEvaluado Entonces
+                    valorCentroEvaluado ← -1
+                    break
+                Sino Si matrizCostos[centro][i] < segundoMin Entonces
+                    segundoMin ← matrizCostos[centro][i]
+                Fin Si
+            Fin Para
+            Si matrizCostos[centroEvaluado][i] = valorCentroEvaluado Entonces
+                redMin ← redMin + segundoMin - valorCentroEvaluado
+            Fin Si
+        Fin Para
+        Devolver redMin
+    Fin Función
+
+    Función CalcularRedMax(centroEvaluado, centrosConsiderados, centrosConstruidos)
+	Entrada: centroEvaluado: numero entero , centrosConsiderados: vector <numeros enteros> ,centrosConstruidos: vector <numeros enteros>
+	Salida: numero entero
+        redMax ← 0
+        Si centrosConstruidos = null Entonces
+            Para i = 0 Hasta cantClientes - 1 
+                valorCentroEvaluado ← matrizCostos[centroEvaluado][i]
+                max ← infinito negativo                                               
+                Para cada centro en centrosConsiderados 
+                    Si matrizCostos[centro][i] > max Entonces
+                        max ← matrizCostos[centro][i]
+                    Fin Si
+                Fin Para
+                Si valorCentroEvaluado < max Entonces
+                    redMax ← redMax + max - valorCentroEvaluado
+                Fin Si
+            Fin Para
+        Sino
+            Para i = 0 Hasta cantClientes - 1 
+                valorCentroEvaluado ← matrizCostos[centroEvaluado][i]
+                min ← infinito
+                Para cada centro en centrosConstruidos 
+                    Si matrizCostos[centro][i] < min Entonces
+                        min ← matrizCostos[centro][i]
+                    Fin Si
+                Fin Para
+                Si valorCentroEvaluado < min Entonces
+                    redMax ← redMax + min - valorCentroEvaluado
+                Fin Si
+            Fin Para
+        Fin Si
+        Devolver redMax
+    Fin Función
+Fin Algoritmo
