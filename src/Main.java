@@ -80,7 +80,7 @@ public class Main {
     public static int CalcularRedMax(int centroEvaluado, List<Integer> centrosConsiderados, List<Integer>centrosConstruidos){
         int redMax = 0;
         //la primera pasada agarro el maximo y despues comparo con los centros construidos
-        if (centrosConstruidos == null) {
+        if (centrosConstruidos.size() == 0) {
             for (int i = 0; i < cantClientes; i++){
                 int valorCentroEvaluado = matrizCostos[centroEvaluado][i];
                 int max = Integer.MIN_VALUE;
@@ -208,7 +208,7 @@ public class Main {
         for (int i = 50; i < 58; i++){
             int[] costosCD = dijkstra.find_dijkstra(matrizAdyacencia, i);
             for (int j = 0; j < 50; j++) {
-                matrizCostos[i-50][j] = costosCD[j];
+                matrizCostos[i-50][j] = (costosCD[j] + costosCentrosAlPuerto[i-50]) * volumenProduccionClientes[j];
             }
         }
 
