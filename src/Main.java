@@ -7,12 +7,22 @@ import java.util.*;
 
 
 public class Main {
+
+    // Ejercicio real TPO
+
     static final int cantCentros = 8;
     static final int cantClientes = 50;
     static int[] volumenProduccionClientes = new int[cantClientes];
     static int[][] matrizCostos = new int[cantCentros][cantClientes];
     static int[] costosFijosCentros = new int[cantCentros];
     static int[] costosCentrosAlPuerto = new int[cantCentros];
+
+    // Ejercicio en clase
+
+//    static final int cantCentros = 4;
+//    static final int cantClientes = 5;
+//    static int[][] matrizCostos;
+//    static int[] costosFijosCentros;
 
     public static int CalcularU(List<Integer>centrosConstruidos){
         int costoU = 0;
@@ -111,41 +121,49 @@ public class Main {
 
         return redMax;
     }
-
-    public static void MostrarGrafo(GrafoTDA U) {
-        ConjuntoTDA V = U.Vertices();
-        ConjuntoTDA D;
-        int v;
-        int d;
-        int p;
-        while(!V.ConjuntoVacio()) {						// ciclo externo
-            v = V.Elegir();
-            System.out.println("Vértice " + v);
-            V.Sacar(v);
-            D = U.Vertices();
-            while(!D.ConjuntoVacio()) {					// ciclo interno
-                d = D.Elegir();
-                p = U.PesoArista(v, d);
-                if (p != 0)
-                    System.out.println("          " + v+"->(Peso: "+ p +")->"+d+" ");
-                D.Sacar(d);
+    public static void QueCentrosConstruyo(int[] centros) {
+        System.out.println("Se construyen los centros: ");
+        for (int i = 0; i < cantCentros; i++) {
+            if (centros[i] == 1) {
+                System.out.println("Centro: " + i);
             }
         }
+        System.out.print("Arreglo x final: ");
+        for (int i = 0; i < cantCentros; i++) {
+            if ( i == 7) {
+                System.out.print(centros[i]);
+            }
+            else {
+                System.out.print(centros[i] + ", ");
+            }
+        }
+        System.out.println();
     }
+    public static void CentroPorCliente(int[] centros) {
+        List<Integer> centrosConstruidosFinales = new ArrayList<>();
+        for (int i = 0; i < cantCentros; i++) {
+            if (centros[i] == 1) {
+                centrosConstruidosFinales.add(i);
+            }
+        }
 
-    public static void MostrarDijkstra(GrafoTDA A,int partida) {
-        int x1 = partida;
-        ConjuntoTDA V2 = A.Vertices();
-        while (!V2.ConjuntoVacio()) {
-            int x2 = V2.Elegir();
-            V2.SacarElemento(x2);
-            if (A.ExisteArista(x1,x2))
-                System.out.print(x1+"->(Costo: "+A.PesoArista(x1,x2)+")->"+x2+" ");
-            else
-                System.out.print(x1+"->(0)->"+x2+" ");
-            System.out.println();
+        for (int i = 0; i < cantClientes; i++) {
+            int posicionCentroCostoMinimo = -1;
+            int min = Integer.MAX_VALUE;
+            for (int j = 0; j < cantCentros; j++) {
+                if (!centrosConstruidosFinales.contains(j)) {
+                    continue;
+                }
+                if (matrizCostos[j][i] < min) {
+                    min = matrizCostos[j][i];
+                    posicionCentroCostoMinimo = j;
+                }
+            }
+            System.out.println("El cliente " + i + " entrega su mercaderia al centro: " + posicionCentroCostoMinimo
+                    + ", con costo " + matrizCostos[posicionCentroCostoMinimo][i]);
         }
     }
+
     public static void main(String[] args) {
 
         GrafoTDA grafo = new GrafoMA();
@@ -220,10 +238,9 @@ public class Main {
 //                {8,     6,      5,      12,     9}
 //        };
 
-        int[] x = CalcularCentrosConstruir();
-        for (int i = 0; i < x.length; i++) {
-            System.out.print(x[i] + ", ");
-        }
+        int[] centrosConstruidos = CalcularCentrosConstruir();
+        QueCentrosConstruyo(centrosConstruidos);
+        CentroPorCliente(centrosConstruidos);
     }
 
     public static int[] CalcularCentrosConstruir() {
@@ -238,7 +255,6 @@ public class Main {
             Si red max < costo fijo -> no construyo
             repetir
         */
-        int costoAnual = -1;
         int[] x = new int[cantCentros];
         PriorityQueue<Nodo> colaP = new PriorityQueue<>();
         List<Integer> centrosConstruidos = new ArrayList<>();
