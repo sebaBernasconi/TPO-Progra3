@@ -169,7 +169,7 @@ public class Main {
         GrafoTDA grafo = new GrafoMA();
         grafo.InicializarGrafo();
 
-        for (int i = 0; i< 50; i++){
+        for (int i = 0; i < cantClientes; i++){
             //agregando los 50 clientes al grafo
             grafo.AgregarVertice(i);
         }
@@ -196,7 +196,8 @@ public class Main {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
+        // A continuacion se cargan los costos fijos de construccion de los centros, los costos del camino de cada
+        // centro al muelle, y el volumen de produccion de cada cliente.
         try {
             File archivoCentros = new File("centrosSinComentarios.txt");
             Scanner sc = new Scanner(archivoCentros);
@@ -220,6 +221,7 @@ public class Main {
             e.printStackTrace();
         }
 
+
         Dijkstra  dijkstra= new Dijkstra();
         int[][] matrizAdyacencia = grafo.getmAdy();
 
@@ -238,9 +240,11 @@ public class Main {
 //                {8,     6,      5,      12,     9}
 //        };
 
+        // Resultado ejercicio:
+        // Devuelve el arreglo con 1 o -1 segun que centro se construye y cual no
         int[] centrosConstruidos = CalcularCentrosConstruir();
-        QueCentrosConstruyo(centrosConstruidos);
-        CentroPorCliente(centrosConstruidos);
+        QueCentrosConstruyo(centrosConstruidos);    // Metodo para imprimir por pantalla que centros se construyen
+        CentroPorCliente(centrosConstruidos);       // Metodo para mostrar que cliente le entrega a que centro
     }
 
     public static int[] CalcularCentrosConstruir() {
@@ -253,7 +257,7 @@ public class Main {
 
             Si red max > costo fijo -> evaluo las dos opciones y meto los nuevos nodos en la cola de prioridad
             Si red max < costo fijo -> no construyo
-            repetir
+            repetir mientras u != c
         */
         int[] x = new int[cantCentros];
         PriorityQueue<Nodo> colaP = new PriorityQueue<>();
@@ -329,7 +333,6 @@ public class Main {
                         Nodo siguiente = new Nodo(x, uTemp, c);
                         colaP.add(siguiente);
                     }
-                    centroEvaluado++;
                 }
                 else {
                     // limpiamos los centros construidos y considerados para el nodo que vamos a evaluar
@@ -381,7 +384,6 @@ public class Main {
                             Nodo siguiente = new Nodo(x, uTemp, c);
                             colaP.add(siguiente);
                         }
-                        centroEvaluado++;
                     }
                     else {
                         int[] xConstruyo = new int[cantCentros];
@@ -459,8 +461,6 @@ public class Main {
                             Nodo noConstruyo = new Nodo(xNoConstruyo, uNoConstruido, c);
                             colaP.add(noConstruyo);
                         }
-
-                        centroEvaluado++;
                     }
                 }
             }
@@ -496,7 +496,6 @@ public class Main {
                     Nodo siguiente = new Nodo(x, u, c);
                     colaP.add(siguiente);
                 }
-                centroEvaluado++;
             }
         }
 
