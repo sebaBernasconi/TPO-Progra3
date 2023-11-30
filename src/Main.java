@@ -7,11 +7,11 @@ import java.util.*;
 
 
 public class Main {
-    static final int cantCentros = 4;
-    static final int cantClientes = 5;
-    static int[] volumenProduccionClientes;
-    static int[][] matrizCostos;
-    static int[] costosFijosCentros;
+    static final int cantCentros = 8;
+    static final int cantClientes = 50;
+    static int[] volumenProduccionClientes = new int[cantClientes];
+    static int[][] matrizCostos = new int[cantCentros][cantClientes];
+    static int[] costosFijosCentros = new int[cantCentros];
     static int[] costosCentrosAlPuerto = new int[cantCentros];
 
     public static int CalcularU(List<Integer>centrosConstruidos){
@@ -151,8 +151,6 @@ public class Main {
         GrafoTDA grafo = new GrafoMA();
         grafo.InicializarGrafo();
 
-        int volumenProduccionClientes = 10;
-
         for (int i = 0; i< 50; i++){
             //agregando los 50 clientes al grafo
             grafo.AgregarVertice(i);
@@ -164,64 +162,71 @@ public class Main {
         }
 
         //a continuacion se cargan todas las aristas("rutas") al grafo
-//        try {
-//            File archivoRutas = new File("rutasSinComentarios.txt");
-//            Scanner sc = new Scanner(archivoRutas);
-//            while (sc.hasNextLine()) {
-//                String data = sc.nextLine();
-//                String[] dataSplit = data.split(",");
-//                int v1 = Integer.parseInt(dataSplit[0]);
-//                int v2 = Integer.parseInt(dataSplit[1]);
-//                int peso = Integer.parseInt(dataSplit[2]);
-//                grafo.AgregarArista(v1, v2, peso);
-//            }
-//        }
-//        catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            File archivoCentros = new File("centrosSinComentarios.txt");
-//            Scanner sc = new Scanner(archivoCentros);
-//            for (int i = 0; i < 8; i++) {
-//                String data = sc.nextLine();
-//                String[] dataSplit = data.split(",");
-//                int costoCentroMuelle = Integer.parseInt(dataSplit[1]);
-//                int costoFijoCentro = Integer.parseInt(dataSplit[2]);
-//                costosCentrosMuelle[i] = costoCentroMuelle;
-//                costosFijosCentros[i] = costoFijoCentro;
-//            }
-//        }
-//        catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            e.printStackTrace();
-//        }
+        try {
+            File archivoRutas = new File("rutasSinComentarios.txt");
+            Scanner sc = new Scanner(archivoRutas);
+            while (sc.hasNextLine()) {
+                String data = sc.nextLine();
+                String[] dataSplit = data.split(",");
+                int v1 = Integer.parseInt(dataSplit[0]);
+                int v2 = Integer.parseInt(dataSplit[1]);
+                int peso = Integer.parseInt(dataSplit[2]);
+                grafo.AgregarArista(v1, v2, peso);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
 
-//        Dijkstra  dijkstra= new Dijkstra();
-//        int[][] matrizAdyacencia = grafo.getmAdy();
-//
-//        for (int i = 50; i < 58; i++){
-//            int[] costosCD = dijkstra.find_dijkstra(matrizAdyacencia, i);
-//            for (int j = 0; j < 50; j++) {
-//                matrizCostos[i-50][j] = costosCD[j];
-//            }
-//        }
-        costosFijosCentros = new int[]{4, 6, 6, 8};
-        matrizCostos = new int[][]{
-                {3,     10,      8,     18,     14},
-                {9,     4,      6,      5,      5},
-                {12,    6,      10,     4,      8},
-                {8,     6,      5,      12,     9}
-        };
+        try {
+            File archivoCentros = new File("centrosSinComentarios.txt");
+            Scanner sc = new Scanner(archivoCentros);
+            for (int i = 0; i < cantCentros; i++) {
+                String data = sc.nextLine();
+                String[] dataSplit = data.split(",");
+                int costoCentroMuelle = Integer.parseInt(dataSplit[1]);
+                int costoFijoCentro = Integer.parseInt(dataSplit[2]);
+                costosCentrosAlPuerto[i] = costoCentroMuelle;
+                costosFijosCentros[i] = costoFijoCentro;
+            }
+            for (int i = 0; i < cantClientes; i++) {
+                String data = sc.nextLine();
+                String[] dataSplit = data.split(",");
+                int volumenProduccion = Integer.parseInt(dataSplit[1]);
+                volumenProduccionClientes[i] = volumenProduccion;
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
 
-        int[] x = CalcularCostoAnual();
+        Dijkstra  dijkstra= new Dijkstra();
+        int[][] matrizAdyacencia = grafo.getmAdy();
+
+        for (int i = 50; i < 58; i++){
+            int[] costosCD = dijkstra.find_dijkstra(matrizAdyacencia, i);
+            for (int j = 0; j < 50; j++) {
+                matrizCostos[i-50][j] = costosCD[j];
+            }
+        }
+
+//        costosFijosCentros = new int[]{4, 6, 6, 8};
+//        matrizCostos = new int[][]{
+//                {3,     10,      8,     18,     14},
+//                {9,     4,      6,      5,      5},
+//                {12,    6,      10,     4,      8},
+//                {8,     6,      5,      12,     9}
+//        };
+
+        int[] x = CalcularCentrosConstruir();
         for (int i = 0; i < x.length; i++) {
             System.out.print(x[i] + ", ");
         }
     }
 
-    public static int[] CalcularCostoAnual() {
+    public static int[] CalcularCentrosConstruir() {
         /*
             creamos el nodo raiz y le calculamos U y C.
             Evaluar si C > U lo descarto y lo saco de la cola
