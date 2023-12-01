@@ -1,0 +1,257 @@
+import implementacion.*;
+import interfaz.ConjuntoTDA;
+import interfaz.GrafoTDA;
+
+import java.io.File;
+import java.util.*;
+
+
+public class Main {
+    static final int cantCentros = 8;
+    static final int cantClientes = 50;
+    static int[] volumenProduccionClientes = new int[cantClientes];
+    static int[][] matrizCostos = new int[cantCentros][cantClientes];
+    static int[] costosFijosCentros = new int[cantCentros];
+    static int[] costosCentrosAlPuerto = new int[cantCentros];
+
+ public static int[] CalcularCentrosConstruir() {        cambiar
+Entrada: nada
+Salida:  arreglo de numeros enteros 
+        costoAnual ←  -1
+        x   ← arreglo de numeros enteros con lenght = cantCentros
+       colaP ← cola de prioridad de nodos
+   
+        centrosConstruidos ← array de numeros enteros
+        centrosConsiderados ← array de numeros enteros
+
+        // loop para agregar los centros a la lista de centros considerados
+        Para i=0  hasta cantCentro-1
+            agregar i al array centros considerados
+        fin para
+        centroEvaluado ← 0
+        c ←1;
+        int u ← Infinito
+        int uPoda ← Infinito
+        raiz ← Crear nuevo Nodo(x, u, CalcularC(centrosConstruidos, centrosConsiderados)
+	
+        agregar el nodo raiz a la colaP
+        Mientras u != c 
+          nodoEvaluado ← nodo en primera posicion de colaP y se eliminó el nodo de la cola de prioridad
+            x ←nodoEvaluado.x ;
+            Para i = 0  hasta  cantCentros-1
+                si  x[i] = 0 entonces 
+                    entonces centroEvaluado = i;
+                   	         break;
+                fin si
+            fin para
+            
+            Si (nodoEvaluado.c < nodoEvaluado.u)   entonces 
+                centrosConstruidos ← vacio
+                centrosConsiderados← vacio
+	fin si
+                Para  i = 0  hasta cantCentros-1
+                    Si x[i] = 1  entonces 
+                        agrego i a centrosConstruidos
+                       agrego i a centrosConsiderados
+                    Fin si
+                    sino si x[i] = 0  entonces 
+                        si  i = centroEvaluado  entonces{
+                            continuar
+                        fin si
+                        agrego i a centrosConsiderados
+                   fin si
+                fin para
+                nodoEvaluado.redMin ← CalcularRedMin(centroEvaluado, centrosConsiderados)
+                Si nodoEvaluado.redMin > costosFijosCentros[centroEvaluado] entonces 
+                    x[centroEvaluado] ← 1      
+                     centrosConstruidos ← vacio
+                     centrosConsiderados ← vacio
+                     Para   i = 0  hasta cantCentros-1   
+                         si x[i] = 1 entonces 
+                              agregar i a  centrosConstruidos
+                         fin si
+                        Sino Si  x[i] = 0 entonces 
+                            Si (i = centroEvaluado) entonces 
+                                  continuar;
+                            fin si
+                             agregar i a centrosConsiderados
+                        fin si
+                    fin para
+
+                    int uTemp ← CalcularU(centrosConstruidos);  // calculo u y c para asignarselo al nuevo nodo
+                    c ← CalcularC(centrosConstruidos, centrosConsiderados);
+                    si (uTemp < uPoda) entonces 
+                        uPoda ← uTemp;
+                        u = uTemp;
+                        Siguiente ← Crear nuevo Nodo(x, uPoda, c);
+                        agregar Siguiente a colaP
+                    fin si
+                    sino entonces {
+                        u ← uTemp
+                       Siguiente ← Crear nuevo Nodo(x, uTemp, c)
+                        agrego Siguiente a colaP
+                    fin sino
+                    centroEvaluado ← centroEvaluado+1
+                fin  para
+                sino  entonces {
+                     centrosConstruidos ← vacio
+                     centrosConsiderados ← vacio
+                
+                    para i = 0 hasta cantCentros-1  {
+                        si  x[i] = 1  entonces {
+                            agregar i a  centrosConstruidos
+                            agregar i a  centrosConsiderados
+                        fin si
+                        sino  si x[i] = 0   entonces{
+                            si (i = centroEvaluado) entonces {
+                                continuar;
+                            fin si
+                            agregar i a centrosConsiderados
+                        fin si
+                    fin para
+                    nodoEvaluado.redMax ← CalcularRedMax(centroEvaluado, centrosConsiderados, centrosConstruidos)
+                    si (nodoEvaluado.redMax < costosFijosCentros[centroEvaluado]) 				entonces {
+                        x[centroEvaluado] ← -1
+                        
+                     centrosConstruidos ← vacio
+                     centrosConsiderados ← vacio
+                      
+                        Para  i = 0 hasta cantCentros-1   {
+                            si (x[i] == 1) entonces  
+                                 agregar i a centrosConstrudos
+
+                            fin si
+                            sino si x[i] = 0)  entonces{
+                                si (i = centroEvaluado) entonces 
+                                    continuar;
+                                fin si
+                                agregar i a centrosConsiderados
+                            fin si
+                        fin para
+
+                        int uTemp ← CalcularU(centrosConstruidos)                        
+		c ← CalcularC(centrosConstruidos, centrosConsiderados)
+                        si  (uTemp < uPoda)  entonces {
+                            uPoda ← uTemp;
+                            u ← uTemp;
+                            Nodo siguiente ← new Nodo(x, uPoda, c)
+                            agregar siguiente a colaP
+                        fin si
+                        sino 
+                            u ← uTemp;
+                            Nodo siguiente ← new Nodo(x, uTemp, c);
+                            agregar siguiente a colaP
+
+                        fin sino
+                        centroEvaluado ← centroEvaluado +1
+                    fin si
+                    sino entonces {
+                        xConstruyo ← Crear array [cantCentros]
+                       para   i = 0 hasta  cantCentros-1
+                              xConstruyo[i] ← x[i];
+                        fin para
+                        xConstruyo[centroEvaluado] ← 1                      
+                        centrosConstruidos ← vacio
+                        centrosConsiderados ← vacio
+                        Para   i = 0  hasta cantCentros -1
+                            si  (xConstruyo[i] = 1)  entonces 
+                                agregar i a centrosConstruidos
+                            fin si
+                            sino si  (xConstruyo[i] == 0)  entonces
+                                si (i = centroEvaluado) entonces
+                                    continuar;
+                                fin si
+                                agregar i a centrosConsiderados
+                            fin si
+                        fin para
+
+                        int uConstruido ←  CalcularU(centrosConstruidos)  
+                        c ←  CalcularC(centrosConstruidos, centrosConsiderados);
+                        Si (uConstruido < u)   entonces
+                            uPoda ← uConstruido;
+                            u ← uConstruido;
+                            construyo ←  crear Nodo(xConstruyo, uPoda, c);
+                            agregar construyo a colaP
+                        fin  si
+                        sino 
+                            u ←  uConstruido
+                            construyo ←  crear Nodo(xConstruyo, uConstruido, c)
+                            agregar construyo a colaP
+                        fin sino
+
+
+
+                        xNoConstruyo ← crear nuevo array de numeros enteros[cantCentros];
+                        para  ( i = 0 hasta cantCentros-1 ) entonces 
+                            xNoConstruyo[i] ←x[i];
+                        fin para                        
+                         xNoConstruyo[centroEvaluado] ← -1
+                         centrosConstruidos ← vacio
+                         centrosConsiderados ← vacio
+
+                            para  ( i = 0 hasta cantCentros-1)  {
+                                 si (xNoConstruyo[i] = 1) entonces 
+                                      agregar i a centrosConstruidos
+                                 fin si
+                            sino si(xNoConstruyo[i] = 0)   entoncees{
+                                si (i = centroEvaluado)  entonces{
+                                    continuar;
+                                fin si
+                                agregar i a centrosConsiderados
+                            fin si
+                        fin para
+
+                        int uNoConstruido = CalcularU(centrosConstruidos);      // calculo u y c para asignarselo al nuevo nodo
+                        c ←  CalcularC(centrosConstruidos, centrosConsiderados);
+                        si (uNoConstruido < u)  entonces{
+                            uPoda ←  uNoConstruido;
+                            u ← uNoConstruido;
+                            construyo ←  Crear nuevo Nodo(xNoConstruyo, u, c)
+                            agregar construyo a colaP 
+                        fin si
+                        sino {
+                            u ←  uNoConstruido;
+                            noConstruyo ← Crear nuevo Nodo(xNoConstruyo, uNoConstruido, c);
+                            agregar construyo a colaP 
+                        fin sino
+
+                        centroEvaluado← CentroEvaluado+1
+                    fin sino
+                fin sino
+            fin si
+             sino {
+                x[centroEvaluado] ← -1;
+                 centrosConstruidos ← vacio
+                 centrosConsiderados ← vacio
+                   para ( i = 0  hasta cantCentros-1 ) entonces  {
+                        si (x[i] = 1)  entonces
+                            agregar i a centrosConstruidos
+                          fin si
+                    else si (x[i] = 0){
+                        si (i = centroEvaluado) entonces
+                            continuar;
+                        fin si
+                        agregar i a centrosConsiderados
+                    fin si
+                fin para
+
+                int uTemp ← CalcularU(centrosConstruidos);                   
+              c ←  CalcularC(centrosConstruidos, centrosConsiderados);
+                si (uTemp < u) 
+                    uPoda ←  uTemp;
+                    u ←  uTemp;
+                   siguiente ←  Crear nuevo Nodo(x, u, c);
+                    agregar siguiente a colaP                
+                fin si
+
+                sino {
+                    u ← uTemp;
+                    siguiente ←  Crear nuevo Nodo(x, u, c);
+                    agregar siguiente a colaP                
+                fin sino
+                centroEvaluado      ← CentroEvaluado+1         ;
+            fin sino
+        fin mientras
+
+        Devolver x;
+    fin metodo

@@ -103,6 +103,7 @@ Algoritmo CalculoCostos
                 Fin Si
             Fin Para
         Fin Si
+        Imprimir por pantalla costo total anual (c)
         Devolver redMax
     Fin Función
 Fin Algoritmo
@@ -136,7 +137,7 @@ Finprocedimiento
 Procedimiento CentroPorCliente(centros):
 entrada: centros: arreglo de numeros enteros
 salida: nada
-    centrosConstruidosFinales ← Crear nueva Lista de numeros enteros
+    centrosConstruidosFinales ← Crear nueva Lista de numeros enteros con los centros que se decidieron construir
 
     Para i=0 hasta cantCentros-1:
         Si centros[i] = 1 entonces:
@@ -146,7 +147,7 @@ salida: nada
 
     Para cada cliente de 0 a cantClientes:
         posicionCentroCostoMinimo ← -1
-        min ← ValorMuyGrande
+        min ← Infinito
         Para cada centro j en centrosConstruidosFinales:
             Si matrizCostos[j][cliente] < min entonces:
                 min ← matrizCostos[j][cliente]

@@ -499,6 +499,7 @@ public class Main {
             }
         }
 
+        System.out.println("COSTO TOTAL ANUAL: " + c);
         return x;
     }
 }
